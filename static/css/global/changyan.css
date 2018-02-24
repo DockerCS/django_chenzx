@@ -1,0 +1,20 @@
+/*chang yan*/
+
+#cyReward .cy-reward-btn {
+    margin-left: 42.17%;
+}
+
+/* 回复评论背景 */
+#SOHUCS #SOHU_MAIN .module-cmt-list .wrap-build-gw .build-floor-gw {
+    border: 1px solid #acbac6 !important;
+    border-radius: 5px !important;
+    background-color: #e5e5e5 !important;
+    position: relative;
+    z-index: 2;
+    padding: 4px 4px 6px;
+}
+/* 鼠标回复评论框悬浮变色 */
+#SOHUCS #SOHU_MAIN .module-cmt-list .wrap-build-gw .block-cont-hover-e {
+    border: 1px solid #acbac6 !important;
+    background-color: #f5fafe !important;
+}

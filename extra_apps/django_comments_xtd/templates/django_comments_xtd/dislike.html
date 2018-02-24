@@ -1,0 +1,91 @@
+{% extends "django_comments_xtd/base.html" %}
+{% load i18n %}
+{% load comments_xtd %}
+
+{% block title %}确认您的意见{% endblock %}
+
+{% block header %}
+    <a href="{{ comment.content_object.get_absolute_url }}">{{ comment.content_object }}</a>
+{% endblock %}
+
+{% block content %}
+    <h4 class="page-header text-center">
+        {% if request.user.is_authenticated %}
+            {% if already_disliked_it %}
+                这条评论您已经标记为不赞同，是否改变主意？
+            {% else %}
+                您是否赞同这条评论？
+            {% endif %}
+        {% else %}
+            您还未登陆，请登录后操作！
+        {% endif %}
+    </h4>
+    <p class="alert alert-info text-center">请您确认对这条评论的意见。</p>
+    <div class="row">
+        <div class="col-lg-offset-1 col-md-offset-1 col-lg-10 col-md-10">
+            <div class="media">
+                <div class="media-left">
+                    {% if comment.user_url %}
+                        <a href="{{ comment.user_url }}">
+                            {{ comment.user_email|xtd_comment_gravatar }}
+                        </a>
+                    {% else %}
+                        {{ comment.user_email|xtd_comment_gravatar }}
+                    {% endif %}
+                </div>
+                <div class="media-body">
+                    <h6 class="media-heading">
+                        {{ comment.submit_date|date:"N j, Y, P" }}&nbsp;-&nbsp;
+                        {% if comment.user_url %}
+                            <a href="{{ comment.user_url }}" target="_new">{% endif %}
+                        {{ comment.user_name }}
+                        {% if comment.user_url %}
+                            </a>
+                        {% endif %}
+                    </h6>
+                    <p>{{ comment.comment }}</p>
+                </div>
+            </div>
+            {% with object_absolute_url=comment.content_object.get_absolute_url %}
+                {% if object_absolute_url %}
+                    <p class="text-center">
+                        {% trans "Posted to "%}&nbsp;<a href="{{ object_absolute_url }}">{{ comment.content_object }}</a>
+                    </p>
+                {% endif %}
+            {% endwith %}
+            <div class="visible-lg-block visible-md-block">
+                <hr/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-offset-1 col-md-offset-1 col-lg-10 col-md-10">
+            {% if request.user.is_authenticated %}
+                {% if already_disliked_it %}
+                    <div class="alert alert-warning text-center">
+                        如果您想收回您对这条评论的意见，请您点击收回不赞同！
+                    </div>
+                {% endif %}
+            {% endif %}
+            <div class="well well-lg">
+                {% if request.user.is_authenticated %}
+                    <form action="." method="post" class="form-horizontal">{% csrf_token %}
+                        <input type="hidden" name="next" value="{{ comment.content_object.get_absolute_url }}">
+                        <div class="form-group">
+                            <div class="text-center">
+                                {% if already_disliked_it %}
+                                    <input type="submit" name="submit" class="btn btn-warning" value="收回不赞同"/>
+                                {% else %}
+                                    <input type="submit" name="submit" class="btn btn-primary" value="我不赞同"/>
+                                {% endif %}
+                                <a class="btn btn-default" href="{{ comment.content_object.get_absolute_url }}">取消</a>
+                            </div>
+                        </div>
+                    </form>
+                {% else %}
+                    {% include 'comments/_login_panel.html' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>系统消息</title>
+{% endblock title %}
+
+
+{% block message %}
+    {% if msg %}
+        <div class="alert alert-block" style="text-align: center; color: #0000cc; margin-top: 100px; height: 500px">
+            <ul>
+                <h3><strong>{{ msg }}</strong></h3>
+            </ul>
+        </div>
+    {% endif %}
+{% endblock message %}

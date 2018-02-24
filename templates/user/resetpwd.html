@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    <title>夕象^重置密码</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <!--用户css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user/userpage.css' %}">
+    <!--使用bootstrap框架-->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+{% endblock customstatic %}
+
+{% block user %}
+    <div class="container">
+        <form action="{% url 'resetpassword' %}" method="post" id="resetpwd-form">
+            <div class="panel panel-default panel-single" id="user-form">
+                <div class="panel-heading">
+                    <h2 class="form-signin-heading">重设密码</h2>
+                </div>
+                <div class="panel-body">
+                    {% if msg %}
+                        <div class="alert alert-block alert-danger">
+                            <ul>
+                                {{ msg }}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <div id="div_id_username" class="row {% if resetpwdform.password1.errors %} has-error{% endif %}">
+                        <div class="controls clearfix">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
+                                <input class="form-control input-lg" id="id_password" name="password1" type="password" value="{{ resetpwdform.password1.value }}" placeholder="请输入新密码">
+                            </div>
+                            {% for error in resetpwdform.password1.errors %}
+                                <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="text-danger help-block">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!--传入需要修改的邮箱给后台-->
+                    <input type="hidden" name="email" value="{{ email }}">
+                    <div id="div_id_username" class="row {% if resetpwdform.password2.errors %} has-error{% endif %}">
+                        <div class="controls clearfix">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
+                                <input class="form-control input-lg" id="id_password" name="password2" type="password" value="{{ resetpwdform.password2.value }}" placeholder="请再输入一遍新密码">
+                            </div>
+                            {% for error in resetpwdform.password2.errors %}
+                                <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="text-danger help-block">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block login-button" type="submit">重设密码</button>
+                </div>
+            </div>
+            {% csrf_token %}
+        </form>
+    </div>
+    <script type="text/javascript">
+        document.getElementById('id_username').focus()
+        $('.js-captcha-refresh').click(function(){
+            $form = $(this).parents('form');
+            $.getJSON($(this).data('url'), {}, function(json) {
+                // This should update your captcha image src and captcha hidden input
+            });
+            return false;
+        });
+    </script>
+{% endblock user %}
+
+
+

@@ -1,0 +1,117 @@
+* {
+	-webkit-box-sizing: unset!important;
+    box-sizing: unset!important;
+}
+/* 评论区 */
+textarea.form-control {
+    height: 100px!important;
+}
+.comment-area {
+    margin: 20px 0 20px 0;
+}
+.well {
+    margin-bottom: 40px!important;
+    padding: 20px 5px 5px 0!important;
+    border: 2px solid #acbac6 !important;
+    border-radius: 20px!important;
+    background-color: #e5e5e5 !important;
+}
+.user-login {
+    text-align: center;
+}
+.form-control {
+    border-radius: 10px!important;
+}
+.comment-btn {
+    margin-top: 10px;
+}
+
+/*第三方账户登录*/
+.social-sign{
+    margin-top:15px;
+    text-align: center;
+    font-size: 14px;
+}
+.social-sign h4{
+    position: relative;
+    margin: 0 0 20px;
+    font-size: 12px;
+    color: #b5b5b5;
+}
+.social-sign ul{
+    margin-bottom: 20px;
+    list-style: none;
+    float: none;
+}
+.social-sign ul li{
+    margin: 0 8px;
+    display: inline-block;
+}
+.social-sign ul li a{
+    width: 35px;
+    height: 35px;
+    background-color: hsla(0,0%,71%,.2);
+    border: 1px solid #35b558;
+    border-radius: 50%;
+    line-height: 50px;
+    display: block;
+}
+.social-sign ul li a:hover {
+    background-color: #fff;
+}
+.social-sign ul li a img {
+    width:25px;
+    height:25px;
+    max-width:100%;
+    max-height:100%;
+    display: inline-block;
+    vertical-align: baseline;
+}
+.social-sign ul li a i {
+    width:25px;
+    height:25px;
+    max-width:100%;
+    max-height:100%;
+    display: inline-block;
+    vertical-align: baseline;
+}
+
+/* 评论列表 */
+.comment-name li {
+    padding: 0 0 5px 0;
+}
+.comment-name ul {
+    float: none;
+    border-bottom: 2px solid #f78585!important;
+}
+.comment-name.title-name {
+    font-size: 16px;
+    font-family: "Microsoft YaHei";
+    color: #333;
+}
+.user-avatar, .media-left img {
+    /*border: 1px solid #acbac6 !important;*/
+    border-radius: 50px !important;
+}
+.comment .media-heading {
+    margin-bottom: 10px;
+    color: #777;
+}
+.comment .media-heading .master {
+    color: red!important;
+}
+.comment .pull-right .comment-time {
+    color: #8590a6!important;
+    font-size: 13px;
+}
+.comment .content {
+    color: #333;
+    margin: 10px 0 0 0;
+}
+.comment .small {
+    color: #777;
+}
+.comment .small:hover {
+    color: #0b76cc;
+    font-weight: bold;
+}

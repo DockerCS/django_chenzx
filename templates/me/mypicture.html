@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %}
+    <title>我的相册 - 夕象 | 陈志祥的个人博客</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <!--me???-->
+    <link href="{% static 'css/me/main.css' %}" rel="stylesheet">
+{% endblock customstatic %}
+
+{% block aboutme %}
+    <div class="container">
+        <div class="con_content">
+            <div class="about_box">
+                <h2 class="nh1"><span>您现在的位置是：<a href="/">网站首页</a>>><a href="#">个人相册</a></span><b>个人相册</b></h2>
+                <div class="lispic">
+                    <ul>
+                        {% for picture in mypicture_list %}
+                            <li>
+                                <a href="{% url 'me:picture' picture.id %}" title="{{ picture.title }}" target="_blank">
+                                    <img src="{{ MEDIA_URL }}{{ picture.mypicture_cover }}"><span>{{ picture.title }}</span>
+                                </a>
+                            </li>
+                        {% empty %}
+                            <h1 style="text-align: center;margin: 100px 0 250px 0">暂时没有相册，敬请关注！</h1>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock aboutme %}

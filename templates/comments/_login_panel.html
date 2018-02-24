@@ -1,0 +1,29 @@
+<div class="user-login">
+    <div class="text-muted text-center login-header">
+        <span>请登录后发表您的看法</span>
+    </div>
+    <div class="social-sign">
+        <ul>
+            <li>
+                <a href="{% url 'login' %}?next={{ request.path }}" title="账号登录">
+                    <img src="/static/images/logo/logo_login.png" alt="账号登录">
+                </a>
+            </li>
+            <li>
+                <a href="{% url "social:begin" "qq" %}" title="QQ登录">
+                    <img src="/static/images/logo/logo_qq.png" alt="QQ登录">
+                </a>
+            </li>
+            <li>
+                <a href="{% url "social:begin" "weibo" %}" title="微博登录">
+                    <img src="/static/images/logo/logo_sina.png" alt="微博登录">
+                </a>
+            </li>
+            <li>
+                <a href="{% url "social:begin" "github" %}" title="Github登录">
+                    <img src="/static/images/logo/logo_github.png" alt="Github登录">
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

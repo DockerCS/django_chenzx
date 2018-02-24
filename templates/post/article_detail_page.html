@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load comments %}
+{% load comments_xtd %}
+{% load view_num %}
+
+{% block title %}
+    <title>{{ article.title }}</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <!-- ueditor代码高亮 -->
+    <!-- 引用http://blog.csdn.net/leejianjun/article/details/53391170 -->
+    <link rel="stylesheet" href="{% static 'ueditor/third-party/SyntaxHighlighter/shCoreDefault.css' %}" />
+    <script src="{% static 'ueditor/third-party/SyntaxHighlighter/shCore.js' %}"></script>
+    <script type="text/javascript">
+        SyntaxHighlighter.all({"toolbar":true});
+    </script>
+    <!-- 评论样式 -->
+    <link rel="stylesheet" href="{% static 'css/comment/comment.css' %}">
+    <!--使用bootstrap框架-->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+{% endblock customstatic %}
+
+{% block article_list&article_content&blog_filter %}
+    <!-- 文章详细信息展示 -->
+    {% if article.is_published %}
+        <div class="article_detail">
+            <div class="article-header">
+                <div class="article_title">
+                    <h2>{{ article.title }}</h2>
+                </div>
+                <div class="tag-list">
+                    <ul>
+                        <li>
+                            <i class="fa fa-user-md"></i> {{ article.author }}
+                        </li>
+                        <li>
+                            <i class="fa fa-clock-o"></i> {{ article.created_time | date:"Y-m-d" }}
+                        </li>
+                    </ul>
+                    <ul>
+                        <!-- 导入阅读器标签 -->
+                        {% get_view_nums for article as view_num %}
+                        <!-- 评论计数，两处引用 -->
+                        {% get_comment_count for article as comment_count %}
+                        <li>
+                            <a href="{% url 'category' article.category.id %}"><i class="fa fa-list-alt"></i> {{ article.category.name }}</a>
+                        </li>
+                        <li  style="color:#337ab7;">
+                            <a href="{{ article.get_absolute_url }}#comment-area"><i class="fa fa-comments-o"></i> {{ comment_count }}评论</a>
+                        </li>
+                        <li>
+                            <i class="{% if has_favorite %}fa fa-star{% else %}fa fa-star-o{% endif %}" style="color:#337ab7;" aria-hidden="true"></i>
+                            <a href="javascript:void(0);" class="collectionbtn" data-id="{{ article.id }}" data-type="1">
+                                {% if has_favorite %}已收藏{% else %}收藏{% endif %}
+                            </a>
+                        </li>
+                        <li>
+                            <i class="fa fa-eye"></i> {{ view_num }}浏览
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="article_content">
+                <p>{{ content | safe }}</p>
+            </div>
+            <!--上下篇文章推荐，前端参照http://cuiqingcai.com/-->
+            <nav class="article-pre-next">
+                <span class="article-pre">
+                    {% if pre_article %}
+                        <i class="fa fa-angle-double-left" style="font-weight: bold;color: #0000cc"></i>
+                        <a href="/post/{{ pre_article.id }}">上一篇：{{ pre_article.title }}</a>
+                    {% else %}
+                        上一篇：没有了
+                    {% endif %}
+                </span>
+                <span class="article-next">
+                    {% if next_article %}
+                        <a href="/post/{{ next_article.id }}">下一篇：{{ next_article.title }}</a>
+                        <i class="fa fa-angle-double-right" style="font-weight: bold;color: #0000cc"></i>
+                    {% else %}
+                        下一篇：没有了
+                    {% endif %}
+                </span>
+            </nav>
+            <section class="comment-area" id="comment-area">
+                {% if user.is_authenticated %}
+                    <div class="comment">
+                        <div class="well">
+                            {% render_comment_form for article %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="well">
+                        {% include 'comments/_login_panel.html' %}
+                    </div>
+                {% endif %}
+                <div class="comment-list">
+                    <div class="comment-name">
+                        <ul>
+                            <li>
+                                <strong class="title-name">最新评论</strong>
+                            </li>
+                        </ul>
+                    </div>
+                    {% if not comment_count %}
+                        <h4 style="text-align: center;margin-top: 40px">暂时没有评论，请多多指教！</h4>
+                    {% endif %}
+                    {% render_xtdcomment_tree for article allow_flagging allow_feedback show_feedback %}
+                    {% block extra-js %}
+                        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+                        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+                        <script>
+                            $(function () {
+                                $('[data-toggle="tooltip"]').tooltip({html: true})
+                            })
+                        </script>
+                    {% endblock %}
+                </div>
+            </section>
+        </div>
+    {% else %}
+        <div class="search-empty"><h3>您寻找的博客暂时没有发表，请继续关注！</h3></div>
+    {% endif %}
+     <script type="text/javascript">
+         // 收藏
+         function add_fav(current_elem, favorite_id, favorite_type){
+             $.ajax({
+                 cache: false,
+                 type: "POST",
+                 dataType: 'json',
+                 url: "{% url 'addfavorite' %}",
+                 data: {'favorite_id':favorite_id, 'favorite_type':favorite_type},
+                 async: true,
+                 beforeSend: function(xhr, settings){
+                     xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                 },
+                 success: function(data) {
+                     if(data.status == "fail"){
+                         if(data.msg == "用户未登录"){
+                             alert("请您登陆后再收藏吧！")
+                         }else{
+                             alert(data.msg)
+                         }
+                     }else if(data.status == "success"){
+                         if(data.msg == "已收藏"){
+                             current_elem.text(data.msg);
+                             current_elem.parent().find('i').attr("class", "fa fa-star");
+                         }else if(data.msg == "收藏"){
+                             current_elem.text(data.msg);
+                             current_elem.parent().find('i').attr("class", "fa fa-star-o");
+                         }
+                     }
+                 }
+             });
+         }
+         $('.collectionbtn').click(function(){
+             var favorite_id = $(this).attr('data-id');
+             var favorite_type = $(this).attr('data-type');
+             add_fav($(this), favorite_id, favorite_type);
+         });
+     </script>
+{% endblock article_list&article_content&blog_filter %}
+
+

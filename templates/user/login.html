@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    <title>夕象^登录</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <!--用户css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user/userpage.css' %}">
+    <!--使用bootstrap框架-->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+{% endblock customstatic %}
+
+{% block user %}
+    <div class="container">
+        <form action="{% url 'login' %}" method="post" id="login-form">
+            <input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}/{% endif %}"/>
+            <div class="panel panel-default panel-single" id="user-form">
+                <div class="panel-heading">
+                    <h2 class="form-signin-heading">请登录</h2>
+                </div>
+                <div class="panel-body">
+                    {% if msg %}
+                        <div class="alert alert-block alert-danger">
+                            <ul>
+                                {{ msg }}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <div id="div_id_username" class="row {% if loginform.username.errors %} has-error{% endif %}">
+                        <div class="controls clearfix">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                <input class="form-control input-lg" id="id_username" maxlength="254" name="username" type="text" value="{{ loginform.username.value }}" placeholder="请输入用户名或邮箱">
+                            </div>
+                            {% for error in loginform.username.errors %}
+                                <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="text-danger help-block">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div id="div_id_username" class="row {% if loginform.password.errors %} has-error{% endif %}">
+                        <div class="controls clearfix">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
+                                <input class="form-control input-lg" id="id_password" name="password" type="password" value="{{ loginform.password.value }}" placeholder="请输入密码">
+                            </div>
+                            {% for error in loginform.password.errors %}
+                                <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="text-danger help-block">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="text-info">
+                        <a href="{% url 'register' %}"> 还没有帐号?</a>
+                        <a href="{% url 'forgetpwd' %}"> 忘记密码？</a>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block login-button" type="submit">登录</button>
+                    {% include 'user/_social_login.html' %}
+                </div>
+            </div>
+            {% csrf_token %}
+        </form>
+    </div>
+    <script type="text/javascript">
+        document.getElementById('id_username').focus()
+    </script>
+{% endblock user %}
+
+
+

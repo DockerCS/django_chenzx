@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %}
+    <title>{{ picture.title }} | 我的相册 - 夕象 | 陈志祥的个人博客</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <!--me???-->
+    <link href="{% static 'css/me/main.css' %}" rel="stylesheet">
+    <!--相册图片打开效果-->
+    <script src="{% static 'js/me/jquery.js' %}"></script>
+    <script src="{% static 'js/me/layer.min.js' %}"></script>
+{% endblock customstatic %}
+
+{% block aboutme %}
+    <div class="container">
+        <div class="con_content">
+            <div class="about_box">
+                <h2 class="nh1"><span>您现在的位置是：<a href="/">网站首页</a>>><a href="{% url 'me:mypicture' %}">个人相册</a>>><a href="#">{{ picture.title }}</a></span><b>个人相册</b></h2>
+                <div class="lispic" id="img">
+                    <ul>
+                        {% for photo in photo_list %}
+                            <li><img src="{{ MEDIA_URL }}{{ photo.photo }}"><span>{{ photo.title }}</span></li>
+                        {% empty %}
+                            <h1 style="text-align: center;margin: 100px 0 250px 0">暂时没有照片，敬请关注！</h1>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--照片分页功能-->
+        <div class="post_list_footer" style="margin-bottom: 10px">
+            <span class="post_footer_tip">共{{ pages.count }}张照片。当前第{{ photo_list.number }}页，共{{ pages.num_pages }}页</span>
+            <div class="post-pages">
+                <ul class="page">
+                    <li>
+                        <a href="?page={% if photo_list.has_previous %}{{ photo_list.previous_page_number }}{% else %}{{ photo_list.number }}{% endif %}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    {% for page in pages.page_range_ex %}
+                        {% if page == '...' %}
+                            <li>...</li>
+                        {% else %}
+                            <li class="page-list"><a href="?page={{ page }}">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <li>
+                        <a href="?page={% if photo_list.has_next %}{{ photo_list.next_page_number }}{% else %}{{ photo_list.number }}{% endif %}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+                {# 页码跳转的html代码 #}
+                <ul class="pagination">
+                    <li id="page_goto">
+                        <span><input type="text" value="{{ photo_list.number }}" placeholder="{{ photo_list.number }}"></span>
+                    </li>
+                    <li><a href="javascript:void(0);" onClick="page_goto();">Go</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock aboutme %}
+
+{% block customjs %}
+    <script type="text/javascript">
+        //设置凸显当前页码
+        $(".page li a").each(function(){
+            //首页中
+            if($(this).text()=="{{ photo_list.number }}"){
+                $(this).parent().addClass("active");
+            }
+        });
+        //页码跳转处理
+        function page_goto(page){
+            var page = $("#page_goto input")[0].value;
+            window.location.href = '?page=' + page;  //重定向
+            return false;
+        }
+        //照片打开效果
+        ;!function(){
+            layer.use('extend/layer.ext.js', function(){
+                //初始加载即调用，所以需放在ext回调里
+                layer.ext = function(){
+                    layer.photosPage({
+                        html:'<div style="padding:20px;"><p>博客主页点击这里<a href="/" style="color:#A30000;" target="_blank">chenzx.name</a></p><br><p>相册支持左右方向键，支持Esc关闭</p><p id="change"></p></div>',
+                        title: '{{ picture.title }}',
+                        id: 100, //相册id，可选
+                        parent:'#img li'
+                    });
+                };
+            });
+        }();
+    </script>
+{% endblock customjs %}

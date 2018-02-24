@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    <title>夕象^密码重设</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <!--用户css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user/userpage.css' %}">
+    <!--使用bootstrap框架-->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+{% endblock customstatic %}
+
+{% block user %}
+    <div class="container">
+        <form action="{% url 'forgetpwd' %}" method="post" id="password-reset-form">
+            {% csrf_token %}
+            <div class="panel panel-default panel-single" id="user-form" style="max-width: 500px;">
+                <div class="panel-heading">
+                    <h2 class="form-signin-heading">密码重设</h2>
+                </div>
+                <div class="panel-body">
+                    <p class="text-default">忘记了你的密码？请在下面输入你的 email 地址，我们将把新密码设置说明通过邮件发送给你。</p>
+                    {% if msg %}
+                        <div class="alert alert-block alert-danger">
+                            <ul>
+                                {{ msg }}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <div id="div_id_email" class="row{% if forgetpwdform.email.errors %} has-error{% endif %}">
+                        <div class="controls clearfix">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
+                                <input class="form-control input-lg" id="id_email" name="email" type="text" value="{{ forgetpwdform.email.value }}" placeholder="请输入注册或绑定的邮箱">
+                            </div>
+                            {% for error in forgetpwdform.email.errors %}
+                                <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="text-danger help-block">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">提交</button>
+                    <a class="back-login" title="返回登录" href="{% url 'login' %}"><i class="fa fa-reply" aria-hidden="true"></i> 返回登录</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        document.getElementById('id_email').focus()
+    </script>
+{% endblock user %}

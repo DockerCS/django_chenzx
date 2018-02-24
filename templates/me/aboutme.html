@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load view_num %}
+
+{% block title %}
+    <title>关于我 - 夕象 | 陈志祥的个人博客</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <!--me???-->
+    <link href="{% static 'css/me/main.css' %}" rel="stylesheet">
+{% endblock customstatic %}
+
+
+{% block aboutme %}
+    <div class="container">
+        <div class="con_content">
+            <div class="about_box">
+                <h2 class="nh1"><span>您现在的位置是：<a href="/">网站首页</a>>><a href="#">信息浏览</a></span><b>个人简介</b></h2>
+                {% for info in myinfo %}
+                    <div class="f_box">
+                        <!-- 导入阅读器标签 -->
+                        {% get_view_nums for info as view_num %}
+                        <p class="a_title">{{ info.title }}</p>
+                        <p class="p_title"></p>
+                        <p class="box_p"><span>发布时间：{{ info.created_time | date:"Y-m-d H:i:s" }}</span><span>作者：陈志祥</span><span>点击：{{ view_num }}</span>
+                    </div>
+                    <ul class="about_content">
+                        {{ info.profile | safe }}
+                    </ul>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock aboutme %}

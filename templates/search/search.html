@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load highlight %}
+{% load comments %}
+{% load like_num %}
+{% load view_num %}
+
+{% block title %}
+    <title>{{ query }}_夕象的博客搜索结果</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <!--搜索词高亮-->
+    <style>
+        span.highlighted {
+            color: red;
+        }
+    </style>
+{% endblock customstatic %}
+
+{% block article_list&article_content&blog_filter %}
+    {% if query %}
+        {% for result in page.object_list %}
+            {% if result.object.is_published %}
+                <div class="article" style="{% if forloop.first %}margin-top: 10px{% endif %}">
+                    <h3>
+                        <a title="{{ result.object.title }}" href="{% url 'post:articledetail' result.object.id %}" target="_blank">{% highlight result.object.title with query %}</a>
+                        {% if result.object.is_new %}
+                            <p class="new">NEW</p>
+                        {% endif %}
+                        {% if result.object.is_recommend %}
+                            <p class="recommend">推荐</p>
+                        {% endif %}
+                    </h3>
+                    <ul>
+                        <p>{% highlight result.object.content with query %}...</p>
+                    </ul>
+                    <p class="dateview">
+                        <!--导入阅读器标签-->
+                        {% get_like_nums for result.object as like_num %}
+                        {% get_view_nums for result.object as view_num %}
+                        <!-- 评论计数 -->
+                        {% get_comment_count for result.object as comment_count %}
+                        <span><i class="fa fa-calendar"></i> {{ result.object.created_time | date:"Y-m-d" }}</span>
+                        <span><i class="fa fa-eye"></i> {{ view_num }}浏览</span>
+                        <span>
+                            <a href="{{ result.object.get_absolute_url }}#comment-area"><i class="fa fa-comments-o"></i> {{ comment_count }}评论</a>
+                        </span>
+                        <span class="like">
+                            {% if request.user.is_authenticated %}
+                                {% if article.id in like_article_id_list%}
+                                    <i class="fa fa-heart" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                {% endif %}
+                            {% else %}
+                                <i class="fa fa-heart-o" aria-hidden="true"></i>
+                            {% endif %}
+                            <a href="javascript:void(0);" class="likebtn" data-id="{{ result.object.id }}" data-type="article">{{ like_num }}喜欢</a>
+                        </span>
+                        <span><a href="{% url 'category' result.object.category.id %}"><i class="fa fa-tags"></i> {{ result.object.category.name }}</a></span>
+                    </p>
+                </div>
+            {% else %}
+                <div class="search-empty"><h3>暂时没有您想要的答案，请继续关注！</h3></div>
+            {% endif %}
+        {% empty %}
+            <div class="search-empty"><h3>暂时没有您想要的答案，请继续关注！</h3></div>
+        {% endfor %}
+    {% endif %}
+{% endblock article_list&article_content&blog_filter %}
+
+{% block customjs %}
+    <script type="text/javascript">
+        // 点赞
+        $(function () {
+            $('.likebtn').click(function(){
+                var like_type = $(this).attr('data-type');
+                var like_id = $(this).attr('data-id');
+                $.tipsBox({
+                    obj: $(this),
+                    str: "",
+                    callback: function () {
+                    }
+                });
+                niceIn($(this), like_id);
+                add_like($(this), like_type, like_id);
+            });
+            function niceIn(prop){
+                prop.find('i').addClass('niceIn');
+                setTimeout(function(){
+                    prop.find('i').removeClass('niceIn');
+                },1000);
+            }
+            (function ($) {
+                $.extend({
+                    tipsBox: function (options) {
+                        options = $.extend({
+                            obj: null,  //jq对象，要在那个html标签上显示
+                            str: "",  //字符串，要显示的内容;也可以传一段html，如: "<b style='font-family:Microsoft YaHei;'>+1</b>"
+                            startSize: "12px",  //动画开始的文字大小
+                            endSize: "25px",    //动画结束的文字大小
+                            interval: 700,  //动画时间间隔
+                            color: "red",    //文字颜色
+                            callback: function () { }    //回调函数
+                        }, options);
+                        $("body").append("<span class='num'>" + options.str + "</span>");
+                        var box = $(".num");
+                        var left = options.obj.offset().left + options.obj.width() / 2;
+                        var top = options.obj.offset().top - options.obj.height();
+                        box.css({
+                            "position": "absolute",
+                            "left": left + "px",
+                            "top": top + "px",
+                            "z-index": 9999,
+{#                            "font-family": "Times New Roman",#}
+                            "font-size": options.startSize,
+                            "line-height": options.endSize,
+                            "color": options.color
+                        });
+                        box.animate({
+                            "font-size": options.endSize,
+                            "opacity": "0",
+                            "top": top - parseInt(options.endSize) + "px"
+                        }, options.interval, function () {
+                            box.remove();
+                            options.callback();
+                        });
+                    }
+                });
+            })(jQuery);
+        });
+        function add_like(current_elem, like_type, like_id){
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: '{% url 'addlike' %}',
+                data: {'like_type':like_type, 'like_id':like_id},
+                dataType: 'json',
+                async: true,
+                beforeSend: function(xhr, settings){
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success: function(data) {
+                    if(data.status == "fail"){
+                        if(data.msg == "用户未登录"){
+                            alert("请您登陆后再点赞吧！")
+                        }else{
+                            alert(data.msg)
+                        }
+                    }else if(data.status == "success"){
+                        if(data.msg == "您已取消点赞"){
+                            current_elem.text(data.like_num);
+                            current_elem.parent().find('i').attr("class", "fa fa-heart-o");
+                            $('.num').text('-1');
+                        }else if(data.msg == "您已点赞"){
+                            current_elem.text(data.like_num);
+                            current_elem.parent().find('i').attr("class", "fa fa-heart");
+                            $('.num').text('+1');
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock customjs %}
+
+

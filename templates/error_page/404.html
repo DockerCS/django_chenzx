@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+<head>
+	<meta charset="UTF-8">
+	<title>404</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/error_page/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/error_page/animate.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/error_page/style.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <!--网页图标-->
+    <link rel="shortcut icon" href="{% static 'images/logo/Panda_Kungfu.ico' %}">
+</head>
+<body class="bg404 errorpage">
+<section>
+	<div class="wp">
+		<div class="cont">
+			<img src="{% static 'images/error_page/pic404.png' %}"/>
+			<br/><br/><br/><br/>
+			<p>wow~这个页面被外星人抢走了~</p>
+			<br/>
+			<span>Wow~ this page was the alien took ~</span>
+            <br/><br/><br/>
+            <p><a href="/">返回首页</a></p>
+		</div>
+	</div>
+</section>
+</body>
+</html>

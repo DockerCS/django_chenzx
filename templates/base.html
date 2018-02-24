@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+{% load staticfiles %}
+{% load view_num %}
+{% load notifications_tags %}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+
+    {% block title %}
+        <title>{{ headline|default:"夕象 | 陈志祥的个人博客" }}</title>
+    {% endblock title %}
+
+    <link href="{% static 'css/global/base.css' %}" rel="stylesheet">
+    <link href="{% static 'css/global/index.css' %}" rel="stylesheet">
+    <!--评论css-->
+    <link href="{% static 'css/global/comment-1.0.0.css' %}" rel="stylesheet">
+    <!--全局css-->
+    <link href="{% static 'css/global/all-1.10.css' %}" rel="stylesheet">
+    <link href="{% static 'css/global/post-1.10.css' %}" rel="stylesheet">
+    <!--字体及i图标-->
+    <link href="{% static 'css/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!--网页图标-->
+    <link rel="shortcut icon" href="{% static 'images/logo/Panda_Kungfu.ico' %}">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+
+    {% block customstatic %}
+    {% endblock customstatic %}
+</head>
+
+<body>
+<!--悬浮栏-->
+<div class="topnav">
+    <a href="/">夕象 | 陈志祥的个人博客</a>
+</div>
+
+{% block user %}
+    <div id="wrapper">
+        <!--顶栏-->
+        <header>
+            <div class="headtop"></div>
+            <div class="contenttop">
+                <div class="logo f_l">夕象 | 陈志祥的个人博客 ―― 江南墨卷</div>
+                <div class="search f_r">
+                    <form action="{% url 'haystack_search' %}" method="get" name="searchform" id="searchform">
+                        {% csrf_token %}
+                        <input name="q" id="keyboard" class="input_text" value="请输入关键字" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字'}" type="search" autocomplete="off" required>
+                        <input name="show" value="title" type="hidden">
+                        <input name="tempid" value="1" type="hidden">
+                        <input name="tbname" value="news" type="hidden">
+                        <input name="Submit" class="input_submit" value="搜索" type="submit">
+                    </form>
+                </div>
+                <div class="blank"></div>
+                <!--顶栏列表-->
+                <nav>
+                    <div  class="navigation">
+                        <ul class="menu">
+                            <li><a href="/">网站首页</a></li>
+                            {% for item in categories %}
+                                {% if not item.parent_id %}
+                                    <li><a href="#">{{ item.name }}</a>
+                                        <ul>
+                                            {% for category in categories %}
+                                                {% if category.parent.id == item.id %}
+                                                    <li><a href="{% url 'category' category.id%}">{{ category.name }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            <li><a href="#">关于我</a>
+                                <ul>
+                                    <li><a href="{% url 'me:personalprofile' %}">个人简介</a></li>
+                                    <li><a href="{% url 'me:mypicture' %}">个人相册</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'me:guestbook' %}">给我留言</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        {% block aboutme %}
+            <div class="jztop"></div>
+            <div class="container">
+                {% block message %}
+                    <!--博客列表-->
+                    <div class="postlist f_l">
+                        {% block article_list&article_content&blog_filter %}
+                        {% endblock article_list&article_content&blog_filter %}
+                    </div>
+                    <!--侧边栏-->
+                    <div class="r_box f_r">
+                        <!--侧边栏上-->
+                        <div class="tit01">
+                            <h3 class="tit">
+                                <i class="fa fa-id-card-o" aria-hidden="true"></i>关注我
+                            </h3>
+                            {% if request.user.is_authenticated %}
+                                <div class="member">
+                                    <div class="member-bd">
+                                        <div class="avatar Popover">
+                                            <a class="member-home" title="个人中心" href="{% url 'userinfo' %}">
+                                                <img class="member-avatar" src="{{ MEDIA_URL }}{{ request.user.avatar }}" alt="用户头像">
+                                            </a>
+                                            {% notifications_unread as unread_count %}
+                                            {% if unread_count %}
+                                                <span class="Messages-count">{{ unread_count }}</span>
+                                            {% endif %}
+                                        </div>
+                                        <span class="member-nick-info">
+                                            Hi! <strong class="J_MemberNick member-nick">{{ request.user.username }}</strong>
+                                        </span>
+                                    </div>
+                                    <div class="member-ft">
+                                        <div class="member-user">
+                                            <a href="{% url 'userinfo' %}" class="btn-login ml1 tb-bg weight">个人中心</a>
+                                            <a href="{% url 'logout' %}?next={{ request.path }}">退出</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="member">
+                                    <div class="member-bd">
+                                        <div class="avatar">
+                                            <a class="member-home" title="请登录" href="{% url 'login' %}?next={{ request.path }}">
+                                                <img class="member-avatar" src="{{ MEDIA_URL }}image/avatar/you.gif" alt="用户头像">
+                                            </a>
+                                        </div>
+                                        <span class="member-nick-info">
+                                            Hi! <strong class="J_MemberNick member-nick">您好，请登录</strong>
+                                        </span>
+                                    </div>
+                                    <div class="member-ft">
+                                        <div class="member-user">
+                                            <a href="{% url 'login' %}?next={{ request.path }}" class="btn-login ml1 tb-bg weight">登录</a>
+                                            <a href="{% url 'register' %}">注册</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <!--侧边栏中-->
+                        <div class="tuwen">
+                            <h3 class="tit">
+                                <i class="fa fa-arrows" aria-hidden="true"></i>随机推荐
+                            </h3>
+                            <ul class="random-rank">
+                                {% for article in rand_articles %}
+                                    <li>
+                                        <a href="/post/{{ article.id }}">
+                                            <b>{{ article.title }}</b>
+                                        </a>
+                                        <p>
+                                            <span class="tulanmu"><a href="{% url 'category' article.category.id %}">{{ article.category.name }}</a></span>
+                                            <span class="tutime">{{ article.created_time | date:"Y-m-d" }}</span>
+                                        </p>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <!--侧边下-->
+                        <div id="side-float" class="ph1">
+                            <h3 class="tit">
+                                <i class="fa fa-th-large" aria-hidden="true"></i>点击排行
+                            </h3>
+                            <ul class="click-rank">
+                                <!--导入阅读器标签-->
+                                {% for article in click_article %}
+                                    {% if article.is_published %}
+                                        <li>
+                                            {% get_view_nums for article as view_num %}
+                                            <table class="click-index">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="c-content">
+                                                            <span>
+                                                                <span class="c-index {% if forloop.first %}c-index-hot1{% elif forloop.counter == 2 %}c-index-hot2{% elif forloop.counter == 3 %}c-index-hot3{% endif %}">
+                                                                    {{ forloop.counter }}
+                                                                </span>
+                                                                <a href="{% url 'post:articledetail' article.id %}" title="{{ article.title }}" target="_blank">
+                                                                    {{ article.title }}
+                                                                </a>
+                                                            </span>
+                                                        </td>
+                                                        <td class="c-content-right"><p class="view_num">{{ view_num }}</p></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endblock message %}
+            </div>
+            <div class="jzend"></div>
+        {% endblock aboutme %}
+         <!--返回顶部-->
+        <div class="back-top f_r">
+            <a id="scrolltop" class="gotop" href="javascript:void(0)" title="返回顶部">
+                <img class="img-gotop" src="/static/images/goto_top.png" alt="返回顶部">
+            </a>
+        </div>
+    </div>
+    <!--页脚-->
+    <footer>
+        <div class="footer">
+            <div class="footer-a">
+                <p>All Rights Reserved 版权所有：<a href="/">夕象 | 陈志祥的个人博客</a> 备案号：粤ICP备17103782号</p>
+            </div>
+            <div class="footer-b">
+                <p>前端样式来自于 <a href="http://www.yangqq.com" target="_blank">杨青个人博客网站</a></p>
+            </div>
+        </div>
+    </footer>
+
+    {% block customjs %}
+    {% endblock customjs %}
+
+    <script type=text/javascript>
+        // 顶栏状态栏下拉
+        $(function() {
+            $(".menu ul").css({display: "none"}); // Opera Fix
+            $(".menu li").hover(function(){
+                $(this).find('ul:first').css({visibility: "visible",display: "none"}).slideDown("normal");
+            }, function(){
+                $(this).find('ul:first').css({visibility: "hidden"});
+            });
+        });
+        // 点击返回头部效果
+        $(function () {
+            // 距离顶部400px时，不显示返回顶部链接
+            $(window).scroll(function() {
+                if ($(window).scrollTop()>400){
+                    $("#scrolltop").fadeIn(1500);
+                } else {
+                    $("#scrolltop").fadeOut(1000);
+                }
+            });
+            // 点击跳转链接，回顶部
+            $("#scrolltop").click(function(){
+                $("html,body").animate({scrollTop:0}, 500);
+                return false
+            });
+        });
+        //侧栏跟随
+        $(function() {
+            var oDiv=document.getElementById("side-float");
+            var H=0,iE6;
+            var Y=oDiv;
+            while(Y){H+=Y.offsetTop;Y=Y.offsetParent};
+            iE6=window.ActiveXObject&&!window.XMLHttpRequest;
+            if(!iE6){
+                window.onscroll=function()
+                {
+                    var s=document.body.scrollTop||document.documentElement.scrollTop;
+                    if(s>H){oDiv.className="ph1 ph2";if(iE6){oDiv.style.top=(s-H)+"px";}}
+                    else{oDiv.className="ph1";}
+                };
+            }
+        });
+    </script>
+{% endblock user %}
+</body>
+</html>

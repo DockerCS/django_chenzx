@@ -1,0 +1,64 @@
+{% extends 'user/userinfo/userinfo.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    <title>我的消息 - 夕象 | 陈志祥的个人博客</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user/usercenter.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/error_page/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/error_page/reset.css' %}">
+    <!--收藏文章的css-->
+    <link href="{% static 'css/global/index.css' %}" rel="stylesheet">
+{% endblock customstatic %}
+
+{% block usercenter %}
+    <div class="public_m2">我的收藏</div>
+    <!--照片和个人资料-->
+    <div class="personal_des">
+        <div class="inforcon">
+            <div class="topic" >
+                <div class="personal_des permessage">
+                    <div class="head">
+                        <ul class="tab_header messagehead">
+                            <li><a href="{% url 'myfavarticle' %}">收藏的文章</a></li>
+                            <li class="active"><a href="{% url 'myfavtopic' %}">收藏的专题</a></li>
+                        </ul>
+                    </div>
+                    {% if fav_article_list %}
+                        <div class="postlist">
+                            {% for article in fav_article_list %}
+                                <div class="topic-list">
+                                    <h3><a title="{{ article.title }}" href="{% url 'post:articledetail' article.id %}">{{ article.title }}</a></h3>
+                                    <ul>
+                                        <p>{{ article.excerpt }}...</p>
+                                    </ul>
+                                    <p class="dateview">
+                                        <!--导入阅读器标签-->
+                                        {% load view_num %}
+                                        {% load like_num %}
+                                        {% get_view_nums for article as view_num %}
+                                        {% get_like_nums for article as like_num %}
+                                        <span><i class="fa fa-calendar"></i> {{ article.created_time | date:"Y-m-d" }}</span>
+                                        <span><i class="fa fa-eye"></i> {{ view_num }}浏览</span>
+                                        <span><a href="#"><i class="fa fa-comments-o"></i> {{ article.comment_num }}评论</a></span>
+                                        <span><a onClick="like_article();" href="javascript:void(0);"><i class="fa fa-heart-o"></i> {{ like_num }}喜欢</a></span>
+                                        <span><a href="{% url 'category' article.category.id %}"><i class="fa fa-tags"></i> {{ article.category.name }}</a></span>
+                                    </p>
+                                </div>
+                                <hr>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-block" style="text-align: center; color: #0000cc; margin-top: 100px; height: 500px">
+                            <ul>
+                                <h3><strong>暂时还没有收藏专题，赶紧去收藏吧！</strong></h3>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock usercenter %}

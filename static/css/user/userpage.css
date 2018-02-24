@@ -1,0 +1,115 @@
+/*关于用户登录注册忘记密码等css*/
+.container{
+    background: url(/static/images/bg.jpg) repeat;
+    border: none; /*去除边框*/
+}
+/*登录框*/
+.panel-single {
+    margin: 100px auto 20px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 0 40px rgba(0,0,0,.3)!important;
+    -moz-box-shadow: 0 0 40px rgba(0,0,0,.3)!important;
+    box-shadow: 0 0 40px rgba(0,0,0,.3)!important;
+}
+.panel-heading{
+    border-radius: 10px;
+}
+#user-form {
+    max-width: 380px;
+}
+#user-form .controls{
+    padding: 0px 15px 15px !important;
+}
+
+#user-form .alert-block{
+    padding: 0px;
+}
+#user-form .alert-block ul{
+    margin: 10px 15px;
+    padding-left: 0px;
+}
+#user-form .alert-block ul li{
+    list-style-type: none;
+}
+.login-button{
+    margin-top: 10px;
+}
+/*忘记密码*/
+.text-default {
+    margin-bottom: 10px!important;
+}
+.back-login {
+    color: #777!important;
+    float: right;
+    margin: 15px 0 5px 0;
+}
+.back-login:hover {
+    font-weight: bold;
+    color: #00a2d4!important;
+}
+
+.text-info{
+    margin-top:0px;
+}
+.text-info a:nth-child(1){
+    float: right;
+}
+.text-info a:hover{
+    font-weight: bold;
+}
+
+/*第三方账户登录*/
+.more-sign{
+    margin-top:25px;
+    text-align: center;
+    font-size: 14px;
+}
+.more-sign h4{
+    position: relative;
+    margin: 0 0 20px;
+    font-size: 12px;
+    color: #b5b5b5;
+}
+.more-sign h4:before, .more-sign h4:after{
+    content: "";
+    border-top: 1px solid #b5b5b5;
+    display: block;
+    position: absolute;
+    width: 60px;
+    top: 5px;
+}
+.more-sign h4:before{
+    left: 40px;
+}
+.more-sign h4:after{
+    right: 40px;
+}
+.more-sign ul{
+    margin-bottom: 25px;
+    list-style: none;
+}
+.more-sign ul li{
+    margin: 0 10px;
+    display: inline-block;
+}
+.more-sign ul li a{
+    width: 50px;
+    height: 50px;
+    background-color: hsla(0,0%,71%,.2);
+    border: 1px solid #35b558;
+    border-radius: 50%;
+    line-height: 50px;
+    display: block;
+}
+.more-sign ul li a:hover{
+    background-color: #fff;
+}
+.more-sign ul li a img{
+    width:35px;
+    height:35px;
+    max-width:100%;
+    max-height:100%;
+    display: inline-block;
+}

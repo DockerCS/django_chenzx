@@ -1,0 +1,40 @@
+{% extends 'user/userinfo/userinfo.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    <title>我的评论 - 夕象 | 陈志祥的个人博客</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user/usercenter.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/error_page/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/error_page/reset.css' %}">
+{% endblock customstatic %}
+
+{% block usercenter %}
+    <div class="public_m2">消息管理</div>
+    <!--照片和个人资料-->
+    <div class="personal_des">
+        <div class="inforcon">
+            <div class="user-comment" >
+                <div class="personal_des permessage">
+                    <div class="head">
+                        <ul class="tab_header messagehead">
+                            <li><a href="{% url 'usermessage' %}">系统消息</a></li>
+                            <li class="active"><a href="{% url 'usercomment' %}">我的评论</a></li>
+                        </ul>
+                    </div>
+                    {% if unread_list %}
+                        <h1>暂无</h1>
+                    {% else %}
+                        <div class="alert alert-block" style="text-align: center; color: #0000cc; margin-top: 100px; height: 500px">
+                            <ul>
+                                <h3><strong>暂时还没有评论消息！</strong></h3>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock usercenter %}

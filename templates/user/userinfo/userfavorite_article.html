@@ -1,0 +1,183 @@
+{% extends 'user/userinfo/userinfo.html' %}
+{% load staticfiles %}
+{% load comments %}
+{% load like_num %}
+{% load view_num %}
+
+{% block title %}
+    <title>我的消息 - 夕象 | 陈志祥的个人博客</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user/usercenter.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/error_page/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/error_page/reset.css' %}">
+    <!--收藏文章的css-->
+    <link href="{% static 'css/global/index.css' %}" rel="stylesheet">
+{% endblock customstatic %}
+
+{% block usercenter %}
+    <div class="public_m2">我的收藏</div>
+    <!--照片和个人资料-->
+    <div class="personal_des">
+        <div class="inforcon">
+            <div class="article_list" >
+                <div class="personal_des permessage">
+                    <div class="head">
+                        <ul class="tab_header messagehead">
+                            <li class="active"><a href="{% url 'myfavarticle' %}">收藏的文章</a></li>
+                            <li><a href="{% url 'myfavtopic' %}">收藏的专题</a></li>
+                        </ul>
+                    </div>
+                    {% if fav_article_list %}
+                        <div class="postlist">
+                            {% for article in fav_article_list %}
+                                <div class="article" style="{% if forloop.first %}margin-top: 10px;{% endif %}background-color: #ffffff;">
+                                    <h3>
+                                        <a title="{{ article.title }}" href="{% url 'post:articledetail' article.id %}" target="_blank">{{ article.title }}</a>
+                                        {% if article.is_new %}
+                                            <p class="new">NEW</p>
+                                        {% endif %}
+                                        {% if article.is_recommend %}
+                                            <p class="recommend">推荐</p>
+                                        {% endif %}
+                                    </h3>
+{#                                    <a class="mutedlink" href="{% url 'comments-delete' item.comment.pk %}"><span class="glyphicon glyphicon-trash" title="删除收藏"></span></a>#}
+                                    <ul>
+                                        <p>{{ article.excerpt }}...</p>
+                                    </ul>
+                                    <p class="dateview">
+                                        <!--导入阅读器标签-->
+                                        {% get_like_nums for article as like_num %}
+                                        {% get_view_nums for article as view_num %}
+                                        <!-- 评论计数 -->
+                                        {% get_comment_count for article as comment_count %}
+                                        <span><i class="fa fa-calendar"></i> {{ article.created_time | date:"Y-m-d" }}</span>
+                                        <span><i class="fa fa-eye"></i> {{ view_num }}浏览</span>
+                                        <span>
+                                            <a href="{{ article.get_absolute_url }}#comment-area"><i class="fa fa-comments-o"></i> {{ comment_count }}评论</a>
+                                        </span>
+                                        <span class="like">
+                                            {% if request.user.is_authenticated %}
+                                                {% if article.id in like_article_id_list%}
+                                                    <i class="fa fa-heart" aria-hidden="true"></i>
+                                                {% else %}
+                                                    <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                                {% endif %}
+                                            {% else %}
+                                                <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                            {% endif %}
+                                            <a href="javascript:void(0);" class="likebtn" data-id="{{ article.id }}" data-type="article">{{ like_num }}喜欢</a>
+                                        </span>
+                                        <span><a href="{% url 'category' article.category.id %}"><i class="fa fa-tags"></i> {{ article.category.name }}</a></span>
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-block" style="text-align: center; color: #0000cc; margin-top: 100px; height: 500px">
+                            <ul>
+                                <h3><strong>暂时还没有收藏博客，赶紧去收藏吧！</strong></h3>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock usercenter %}
+
+{% block customjs %}
+    <script type="text/javascript">
+        // 点赞
+        $(function () {
+            $('.likebtn').click(function(){
+                var like_type = $(this).attr('data-type');
+                var like_id = $(this).attr('data-id');
+                $.tipsBox({
+                    obj: $(this),
+                    str: "",
+                    callback: function () {
+                    }
+                });
+                niceIn($(this), like_id);
+                add_like($(this), like_type, like_id);
+            });
+            function niceIn(prop){
+                prop.find('i').addClass('niceIn');
+                setTimeout(function(){
+                    prop.find('i').removeClass('niceIn');
+                },1000);
+            }
+            (function ($) {
+                $.extend({
+                    tipsBox: function (options) {
+                        options = $.extend({
+                            obj: null,  //jq对象，要在那个html标签上显示
+                            str: "",  //字符串，要显示的内容;也可以传一段html，如: "<b style='font-family:Microsoft YaHei;'>+1</b>"
+                            startSize: "12px",  //动画开始的文字大小
+                            endSize: "25px",    //动画结束的文字大小
+                            interval: 700,  //动画时间间隔
+                            color: "red",    //文字颜色
+                            callback: function () { }    //回调函数
+                        }, options);
+                        $("body").append("<span class='num'>" + options.str + "</span>");
+                        var box = $(".num");
+                        var left = options.obj.offset().left + options.obj.width() / 2;
+                        var top = options.obj.offset().top - options.obj.height();
+                        box.css({
+                            "position": "absolute",
+                            "left": left + "px",
+                            "top": top + "px",
+                            "z-index": 9999,
+{#                            "font-family": "Times New Roman",#}
+                            "font-size": options.startSize,
+                            "line-height": options.endSize,
+                            "color": options.color
+                        });
+                        box.animate({
+                            "font-size": options.endSize,
+                            "opacity": "0",
+                            "top": top - parseInt(options.endSize) + "px"
+                        }, options.interval, function () {
+                            box.remove();
+                            options.callback();
+                        });
+                    }
+                });
+            })(jQuery);
+        });
+        function add_like(current_elem, like_type, like_id){
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: '{% url 'addlike' %}',
+                data: {'like_type':like_type, 'like_id':like_id},
+                dataType: 'json',
+                async: true,
+                beforeSend: function(xhr, settings){
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success: function(data) {
+                    if(data.status == "fail"){
+                        if(data.msg == "用户未登录"){
+                            alert("请您登陆后再点赞吧！")
+                        }else{
+                            alert(data.msg)
+                        }
+                    }else if(data.status == "success"){
+                        if(data.msg == "您已取消点赞"){
+                            current_elem.text(data.like_num);
+                            current_elem.parent().find('i').attr("class", "fa fa-heart-o");
+                            $('.num').text('-1');
+                        }else if(data.msg == "您已点赞"){
+                            current_elem.text(data.like_num);
+                            current_elem.parent().find('i').attr("class", "fa fa-heart");
+                            $('.num').text('+1');
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock customjs %}

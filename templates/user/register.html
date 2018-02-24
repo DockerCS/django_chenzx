@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    <title>夕象^注册</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <!--用户css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user/userpage.css' %}">
+    <!--使用bootstrap框架-->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+{% endblock customstatic %}
+
+{% block user %}
+    <div class="container">
+        <form action="{% url 'register' %}" method="post" id="register-form">
+            <div class="panel panel-default panel-single" id="user-form">
+                <div class="panel-heading">
+                    <h2 class="form-signin-heading">邮箱注册</h2>
+                </div>
+                <div class="panel-body">
+                    {% if msg %}
+                        <div class="alert alert-block alert-danger">
+                            <ul>
+                                {{ msg }}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <div id="div_id_username" class="row {% if registerform.username.errors %} has-error{% endif %}">
+                        <div class="controls clearfix">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                <input class="form-control input-lg" id="id_username" maxlength="254" name="username" type="text" value="{% if registerform.username.value is not None %}{{ registerform.username.value }}{% endif %}" placeholder="请输入用户名">
+                            </div>
+                            {% for error in registerform.username.errors %}
+                                <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="text-danger help-block">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div id="div_id_username" class="row {% if registerform.email.errors %} has-error{% endif %}">
+                        <div class="controls clearfix">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                                <input class="form-control input-lg" id="id_username" maxlength="254" name="email" type="text" value="{% if registerform.email.value is not None %}{{ registerform.email.value }}{% endif %}" placeholder="请输入邮箱">
+                            </div>
+                            {% for error in registerform.email.errors %}
+                                <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="text-danger help-block">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div id="div_id_username" class="row {% if registerform.password.errors %} has-error{% endif %}">
+                        <div class="controls clearfix">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
+                                <input class="form-control input-lg" id="id_password" name="password" type="password" value="{{ registerform.password.value }}" placeholder="请输入密码">
+                            </div>
+                            {% for error in registerform.password.errors %}
+                                <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="text-danger help-block">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+{#                    <div id="div_id_username" class="row {% if registerform.captcha.errors %} has-error{% endif %}">#}
+{#                        <div class="controls clearfix">#}
+{#                            <div class="input-group input-group-lg">#}
+{#                                <label>验&nbsp;证&nbsp;码</label>#}
+{#                                {{ registerform.captcha }}#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+                    <div class="text-info">
+                        <a href="{% url 'login' %}"> 立即登录</a>
+                        <a href="{% url 'forgetpwd' %}"> 忘记密码？</a>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block login-button" type="submit">注册</button>
+                    {% include 'user/_social_login.html' %}
+                </div>
+            </div>
+            {% csrf_token %}
+        </form>
+    </div>
+{% endblock user %}
+
+
+
