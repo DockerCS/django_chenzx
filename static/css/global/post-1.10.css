@@ -96,8 +96,15 @@
     overflow:hidden;
     margin: 10px 0 10px 0;
 }
-.filter-item{ border-bottom: 1px #ddd dashed; padding-bottom: 0.5em;}
-.filter-item span{ font-size:18px; padding-left:0.5em; white-space:nowrap; }
+.filter-item{
+    border-bottom: 1px #ddd dashed;
+    padding-bottom: 0.5em;
+}
+.filter-item span{
+    font-size:18px;
+    padding-left:0.5em;
+    white-space:nowrap;
+}
 .filter .feed-switcher {
     padding: 7px;
     float: right;
