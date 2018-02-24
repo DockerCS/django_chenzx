@@ -99,7 +99,7 @@
 .filter-item{ border-bottom: 1px #ddd dashed; padding-bottom: 0.5em;}
 .filter-item span{ font-size:18px; padding-left:0.5em; white-space:nowrap; }
 .filter .feed-switcher {
-    padding-top: 7px;
+    padding: 7px;
     float: right;
     font-size: 12px;
 }
