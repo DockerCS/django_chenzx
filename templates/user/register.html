@@ -42,7 +42,7 @@
                         <div class="controls clearfix">
                             <div class="input-group input-group-lg">
                                 <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-                                <input class="form-control input-lg" id="id_username" maxlength="254" name="email" type="text" value="{% if registerform.email.value is not None %}{{ registerform.email.value }}{% endif %}" placeholder="请输入邮箱">
+                                <input class="form-control input-lg" id="id_email" maxlength="254" name="email" type="text" value="{% if registerform.email.value is not None %}{{ registerform.email.value }}{% endif %}" placeholder="请输入邮箱">
                             </div>
                             {% for error in registerform.email.errors %}
                                 <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="text-danger help-block">{{ error }}</p>
