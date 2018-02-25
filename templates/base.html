@@ -17,7 +17,7 @@
     <link href="{% static 'css/global/base.css' %}" rel="stylesheet">
     <link href="{% static 'css/global/index.css' %}" rel="stylesheet">
     <!--评论css-->
-    <link href="{% static 'css/global/comment-1.0.0.css' %}" rel="stylesheet">
+{#    <link href="{% static 'css/global/comment-1.0.0.css' %}" rel="stylesheet">#}
     <!--全局css-->
     <link href="{% static 'css/global/all-1.10.css' %}" rel="stylesheet">
     <link href="{% static 'css/global/post-1.10.css' %}" rel="stylesheet">
@@ -178,28 +178,24 @@
                             <ul class="click-rank">
                                 <!--导入阅读器标签-->
                                 {% for article in click_article %}
-                                    {% if article.is_published %}
-                                        <li>
-                                            {% get_view_nums for article as view_num %}
-                                            <table class="click-index">
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="c-content">
-                                                            <span>
-                                                                <span class="c-index {% if forloop.first %}c-index-hot1{% elif forloop.counter == 2 %}c-index-hot2{% elif forloop.counter == 3 %}c-index-hot3{% endif %}">
-                                                                    {{ forloop.counter }}
-                                                                </span>
-                                                                <a href="{% url 'post:articledetail' article.id %}" title="{{ article.title }}" target="_blank">
-                                                                    {{ article.title }}
-                                                                </a>
-                                                            </span>
-                                                        </td>
-                                                        <td class="c-content-right"><p class="view_num">{{ view_num }}</p></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </li>
-                                    {% endif %}
+                                    <li>
+                                        {% get_view_nums for article as view_num %}
+                                        <table class="click-index">
+                                            <tr>
+                                                <td class="c-content">
+                                                    <span>
+                                                        <span class="c-index {% if forloop.first %}c-index-hot1{% elif forloop.counter == 2 %}c-index-hot2{% elif forloop.counter == 3 %}c-index-hot3{% endif %}">
+                                                            {{ forloop.counter }}
+                                                        </span>
+                                                        <a href="{% url 'post:articledetail' article.id %}" title="{{ article.title }}" target="_blank">
+                                                            {{ article.title }}
+                                                        </a>
+                                                    </span>
+                                                </td>
+                                                <td class="c-content-right"><p class="view_num">{{ view_num }}</p></td>
+                                            </tr>
+                                        </table>
+                                    </li>
                                 {% endfor %}
                             </ul>
                         </div>
