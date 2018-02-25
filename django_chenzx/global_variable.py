@@ -30,7 +30,7 @@ def user_recommend(request):
     """
     data = {}
     data['rand_articles'] = rand_article()
-    data['click_article'] = Article.objects.annotate(view_nums=models.Count('view_num')).order_by('-view_nums')[:10]  # 点击排行
+    data['click_article'] = Article.objects.annotate(view_nums=models.Sum('view_num')).order_by('-view_nums')[:10]  # 点击排行
 
     return data
 
