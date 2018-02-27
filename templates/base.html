@@ -1,7 +1,6 @@
 <!doctype html>
 <html>
 {% load staticfiles %}
-{% load view_num %}
 {% load notifications_tags %}
 
 
@@ -177,9 +176,8 @@
                             </h3>
                             <ul class="click-rank">
                                 <!--导入阅读器标签-->
-                                {% for article in click_article %}
+                                {% for article in click_article_list %}
                                     <li>
-                                        {% get_view_nums for article as view_num %}
                                         <table class="click-index">
                                             <tr>
                                                 <td class="c-content">
@@ -192,7 +190,7 @@
                                                         </a>
                                                     </span>
                                                 </td>
-                                                <td class="c-content-right"><p class="view_num">{{ view_num }}</p></td>
+                                                <td class="c-content-right"><p class="view_num">{{ article.view_nums }}</p></td>
                                             </tr>
                                         </table>
                                     </li>

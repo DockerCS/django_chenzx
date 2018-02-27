@@ -31,8 +31,8 @@ def user_recommend(request):
     data = {}
     data['rand_articles'] = rand_article()
     sql = "SELECT `post_article`.`id`, `post_article`.`title`, SUM(`tools_viewnum`.`view_num`) AS `view_nums` FROM `post_article` LEFT OUTER JOIN `tools_viewnum` ON (`post_article`.`id` = `tools_viewnum`.`object_id` AND (`tools_viewnum`.`content_type_id` = 12)) WHERE `post_article`.`is_published` = True GROUP BY `post_article`.`id` ORDER BY `view_nums` DESC LIMIT 10"
-    data['click_article'] = Article.objects.raw(sql)
-    # data['click_article'] = Article.objects.filter(is_published=True).annotate(view_nums=models.Sum('view_num')).order_by('-view_nums')[:10]  # 点击排行
+    data['click_article_list'] = Article.objects.raw(sql)
+    # data['click_article_list'] = Article.objects.filter(is_published=True).annotate(view_nums=models.Sum('view_num')).order_by('-view_nums')[:10]  # 点击排行
 
     return data
 
