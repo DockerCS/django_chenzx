@@ -5,6 +5,11 @@
 {% load view_num %}
 
 {% block article_list&article_content&blog_filter %}
+    <div style="width: 100%">
+        {% include "banner/banner.html" %}
+    </div>
+
+
     {% for article in article_list %}
         <div class="article" style="{% if forloop.first %}margin-top: 10px{% endif %}">
             <h3>
