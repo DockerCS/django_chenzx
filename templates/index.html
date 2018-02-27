@@ -52,26 +52,15 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="hot-article f_l">
+        <div class="hot-article f_r">
             <h2 class="title">
-                <i class="fa fa-list-ul" aria-hidden="true"></i> 热门排行
+                <i class="fa fa-list-ul" aria-hidden="true"></i> 最新推荐
             </h2>
             <ul class="hot-article-list">
-                {% for article in hot_article_list %}
+                {% for article in recommend_article_list %}
                     <li>
                         <p>
-                            <span class="like">
-                                {% if request.user.is_authenticated %}
-                                    {% if article.id in like_article_id_list%}
-                                        <i class="fa fa-heart" aria-hidden="true"></i>
-                                    {% else %}
-                                        <i class="fa fa-heart-o" aria-hidden="true"></i>
-                                    {% endif %}
-                                {% else %}
-                                    <i class="fa fa-heart-o" aria-hidden="true"></i>
-                                {% endif %}
-                                <a href="javascript:void(0);" class="likebtn" data-id="{{ article.id }}" data-type="article">{{ article.like_nums }}喜欢</a>
-                            </span>
+                            <span class="like">{{ article.created_time | date:"Y-m-d" }}</span>
                         </p>
                         <span class="label {% if forloop.first %}label-1{% elif forloop.counter == 2 %}label-2{% elif forloop.counter == 3 %}label-3{% endif %}">{{ forloop.counter }}</span>
                         <a href="{% url 'post:articledetail' article.id %}" title="{{ article.title }}" target="_blank">{{ article.title }}</a>
@@ -79,9 +68,9 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="hot-article f_r">
+        <div class="hot-article f_l">
             <h2 class="title">
-                <i class="fa fa-list-ul" aria-hidden="true"></i> 热门排行
+                <i class="fa fa-list-ul" aria-hidden="true"></i> 热评排行
             </h2>
             <ul class="hot-article-list">
                 {% for article in hot_article_list %}
