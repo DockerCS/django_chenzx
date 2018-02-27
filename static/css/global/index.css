@@ -89,6 +89,15 @@
     white-space: nowrap;
     background-color: #999;
 }
+.label-1 {
+    background-color: #fd8c84;
+}
+.label-2 {
+    background-color: #6fc299;
+}
+.label-3 {
+    background-color: #81c1f2;
+}
 .hot-article a {
 	font-size: 14px;
 }
