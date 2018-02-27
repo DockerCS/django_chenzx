@@ -21,10 +21,14 @@ class IndexView(View):
             article_list = Article.objects.filter(is_published=True).order_by('-created_time')  # filter(is_published=True)排除未发表文章
         pages, article_list = getPages(request, article_list, 10)
 
+        sql = "SELECT `post_article`.`id`, `post_article`.`title`, SUM(`tools_likenum`.`like_num`) AS `like_nums` FROM `post_article` LEFT OUTER JOIN `tools_likenum` ON (`post_article`.`id` = `tools_likenum`.`object_id` AND (`tools_likenum`.`content_type_id` = 12)) WHERE `post_article`.`is_published` = True GROUP BY `post_article`.`id` ORDER BY `like_nums` DESC LIMIT 5"
+        hot_article_list = Article.objects.raw(sql)
+
         data = {}
         data['categories'] = categories
         data["article_list"] = article_list
         data['pages'] = pages
+        data['hot_article_list'] = hot_article_list
 
         return render(request, 'index.html', data)
 

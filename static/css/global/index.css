@@ -33,6 +33,65 @@
 	overflow: hidden;
 	margin: 0 15px 10px 10px;
 }
+/*首页热门推荐*/
+.hot-article {
+	padding: 10px;
+    margin-bottom: 10px;
+	background-color: #e7e7e7;
+	border: #acbac6 1px solid;
+	border-radius: 6px;
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,.1);
+	box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.hot-article h2 {
+	line-height: 30px;
+    color: #1abc9c;
+    font-size: 16px;
+    font-weight: 600;
+}
+.hot-article .title {
+	position: relative;
+    height: 30px;
+    border-bottom: 1px solid #90bba8;
+}
+.hot-article .hot-article-list {
+	float: none;
+    padding: 10px 0 0 0;
+    list-style: none;
+    overflow: hidden;
+}
+.hot-article li {
+	overflow: hidden;
+    clear: both;
+    margin-bottom: 10px;
+    height: 20px;
+}
+.hot-article p {
+	float: right;
+    font-size: 14px;
+    color: #777;
+    margin-left: 10px;
+}
+.hot-article .label {
+	margin-right: 8px;
+    padding: 2px 7px;
+    top: -1px;
+}
+.label {
+	position: relative;
+    display: inline-block;
+    padding: 4px 6px 3px;
+    line-height: 14px;
+    color: #fff;
+    vertical-align: baseline;
+    white-space: nowrap;
+    background-color: #999;
+}
+.hot-article a {
+	font-size: 14px;
+}
 /*文章边框*/
 .article {
     padding: 10px;
@@ -101,10 +160,10 @@
 	padding-left: 0;
 	border-radius: 5px;
 }
-.dateview .like {
+.like {
 	color: #f76236!important;
 }
-.dateview .like a {
+.like a {
 	color: #f76236!important;
 }
 .dateview span {
