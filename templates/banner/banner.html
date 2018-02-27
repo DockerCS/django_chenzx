@@ -1,4 +1,3 @@
-<div style="width: 250px; height: 300px; float: left"></div>
 <div id="banner">
     <style type="text/css">
         *{
@@ -7,7 +6,7 @@
             text-decoration: none;
         }
         #banner {
-            width: 600px;
+            width: 855px;
             height: 300px;
             margin: 10px 0 10px 0;
             {#border: 1px solid #333;#}
@@ -20,13 +19,13 @@
             position: relative;
         }
         #list {
-            width: 4200px;
+            width: 5985px;
             height: 300px;
             position: absolute; z-index: 1;
         }
         #list li {
             float: left;
-            width: 600px;
+            width: 855px;
             height: 300px;
             position: relative;
         }
@@ -52,7 +51,7 @@
             width: 100px;
             z-index: 2;
             bottom: 15px;
-            left: 510px;
+            left: 765px;
         }
         #buttons span {
             cursor: pointer;
@@ -119,10 +118,10 @@
                 }
                 list.animate({'left': offset}, 300, function () {
                     if(left > -200){
-                        list.css('left', -600 * len);
+                        list.css('left', -855 * len);
                     }
-                    if(left < (-600 * len)) {
-                        list.css('left', -600);
+                    if(left < (-855 * len)) {
+                        list.css('left', -855);
                     }
                 });
             }
@@ -151,7 +150,7 @@
                 else {
                     index += 1;
                 }
-                animate(-600);
+                animate(-855);
                 showButton();
             });
 
@@ -165,7 +164,7 @@
                 else {
                     index -= 1;
                 }
-                animate(600);
+                animate(855);
                 showButton();
             });
 
@@ -175,7 +174,7 @@
                          return;
                      }
                      var myIndex = parseInt($(this).attr('index'));
-                     var offset = -600 * (myIndex - index);
+                     var offset = -855 * (myIndex - index);
                      animate(offset);
                      index = myIndex;
                      showButton();
@@ -185,7 +184,7 @@
             play();
         });
     </script>
-    <div id="list" style="left: -600px;">
+    <div id="list" style="left: -855px;">
         <li>
             <a href="#" target="_blank">
                 <img src="{{ MEDIA_URL }}image/banner/5.jpg" alt="5"/>
