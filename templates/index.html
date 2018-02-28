@@ -14,7 +14,7 @@
                 <i class="fa fa-list-ul" aria-hidden="true"></i> 热门排行
             </h2>
             <ul class="hot-article-list">
-                {% for article in hot_article_list %}
+                {% for article in hot_like_article_list %}
                     <li>
                         <p>
                             <span class="like">
@@ -38,10 +38,10 @@
         </div>
         <div class="hot-article f_r">
             <h2 class="title">
-                <i class="fa fa-list-ul" aria-hidden="true"></i> 最新发表
+                <i class="fa fa-list-ul" aria-hidden="true"></i> 热门收藏
             </h2>
             <ul class="hot-article-list">
-                {% for article in new_article_list %}
+                {% for article in hot_favorite_article_list %}
                     <li>
                         <p>
                             <span class="like">{{ article.created_time | date:"Y-m-d" }}</span>
