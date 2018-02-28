@@ -44,7 +44,9 @@
                 {% for article in hot_favorite_article_list %}
                     <li>
                         <p>
-                            <span class="like">{{ article.created_time | date:"Y-m-d" }}</span>
+                            <span class="like">
+                                <i class="fa fa-star-o"></i> {{ article.favorite_nums }}收藏
+                            </span>
                         </p>
                         <span class="label {% if forloop.first %}label-1{% elif forloop.counter == 2 %}label-2{% elif forloop.counter == 3 %}label-3{% endif %}">{{ forloop.counter }}</span>
                         <a href="{% url 'post:articledetail' article.id %}" title="{{ article.title }}" target="_blank">{{ article.title }}</a>
