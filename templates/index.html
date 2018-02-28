@@ -45,7 +45,8 @@
                     <li>
                         <p>
                             <span class="like">
-                                <i class="fa fa-star-o"></i> {{ article.favorite_nums }}收藏
+                                <i class="{% if request.user.id == article.user_id %}fa fa-star{% else %}fa fa-star-o{% endif %}" aria-hidden="true"></i>
+                                <a href="javascript:void(0);" id="favorite{{ article.id }}" class="collectionbtn" data-id="{{ article.id }}" data-favorite-nums="{{ article.favorite_nums }}" data-type="1"> {{ article.favorite_nums }}收藏</a>
                             </span>
                         </p>
                         <span class="label {% if forloop.first %}label-1{% elif forloop.counter == 2 %}label-2{% elif forloop.counter == 3 %}label-3{% endif %}">{{ forloop.counter }}</span>
@@ -282,5 +283,47 @@
                 }
             });
         }
+        // 收藏
+        function add_fav(current_elem, favorite_id, data_favorite_nums, favorite_type){
+            $.ajax({
+                cache: false,
+                type: "POST",
+                dataType: 'json',
+                url: "{% url 'addfavorite' %}",
+                data: {'favorite_id':favorite_id, 'favorite_type':favorite_type},
+                async: true,
+                beforeSend: function(xhr, settings){
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success: function(data) {
+                    if(data.status == "fail"){
+                        if(data.msg == "用户未登录"){
+                            alert("请您登陆后再收藏吧！")
+                        }else{
+                            alert(data.msg)
+                        }
+                    }else if(data.status == "success"){
+                        var myId = 'favorite' + favorite_id
+                        if(data.msg == "已收藏"){
+                            var my_favorite_nums = parseInt(data_favorite_nums) + 1;
+                            current_elem.text(my_favorite_nums + '收藏');
+                            current_elem.parent().find('i').attr("class", "fa fa-star");
+                            document.getElementById(myId).dataset.favoriteNums = my_favorite_nums;
+                        }else if(data.msg == "收藏"){
+                            var my_favorite_nums = parseInt(data_favorite_nums) - 1;
+                            current_elem.text(my_favorite_nums + '收藏');
+                            current_elem.parent().find('i').attr("class", "fa fa-star-o");
+                            document.getElementById(myId).dataset.favoriteNums = my_favorite_nums;
+                        }
+                    }
+                }
+            });
+        }
+        $('.collectionbtn').click(function(){
+            var favorite_id = $(this).attr('data-id');
+            var data_favorite_nums = $(this).attr('data-favorite-nums');
+            var favorite_type = $(this).attr('data-type');
+            add_fav($(this), favorite_id, data_favorite_nums, favorite_type);
+         });
     </script>
 {% endblock customjs %}
