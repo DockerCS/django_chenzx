@@ -24,7 +24,7 @@ class IndexView(View):
         pages, article_list = getPages(request, article_list, 10)
 
         hot_like_sql = "SELECT `post_article`.`id`, `post_article`.`title`, SUM(`tools_likenum`.`like_num`) AS `like_nums` FROM `post_article` LEFT OUTER JOIN `tools_likenum` ON (`post_article`.`id` = `tools_likenum`.`object_id` AND (`tools_likenum`.`content_type_id` = 12)) WHERE `post_article`.`is_published` = True GROUP BY `post_article`.`id` ORDER BY `like_nums` DESC LIMIT 5"
-        hot_favorite_sql = "SELECT `post_article`.`id`, `post_article`.`title`, `tools_favorite`.`user_id`, COUNT( `tools_favorite`.`favorite_id` ) AS `favorite_nums` FROM post_article LEFT OUTER JOIN `tools_favorite` ON (`post_article`.`id` = `tools_favorite`.`favorite_id` AND (`tools_favorite`.`favorite_type` = 1)) WHERE `post_article`.`is_published` = TRUE GROUP BY post_article.id ORDER BY favorite_nums DESC LIMIT 5"
+        hot_favorite_sql = "SELECT `post_article`.`id`, `post_article`.`title`, COUNT( `tools_favorite`.`favorite_id` ) AS `favorite_nums` FROM post_article LEFT OUTER JOIN `tools_favorite` ON (`post_article`.`id` = `tools_favorite`.`favorite_id` AND (`tools_favorite`.`favorite_type` = 1)) WHERE `post_article`.`is_published` = TRUE GROUP BY post_article.id ORDER BY favorite_nums DESC LIMIT 5"
         hot_comment_sql = "select `post_article`.`id`, `post_article`.`title` from post_article left join (select * from django_comments where content_type_id =12) as c on post_article.id = c.object_pk group by post_article.id order by count(c.object_pk) desc"
         hot_like_article_list = Article.objects.raw(hot_like_sql)  # 点赞排行
         hot_favorite_article_list = Article.objects.raw(hot_favorite_sql)
@@ -50,17 +50,11 @@ class ArticleDetailView(View):
     def get(self, request, article_id):
         categories = Category.objects.all()
 
-        has_favorite = False
-        if request.user.is_authenticated():
-            if Favorite.objects.filter(user=request.user, favorite_id=int(article_id), favorite_type=int(1)):  # 前端传回的article_id的type为str需要转换为int才能查询
-                has_favorite = True
-
         data = {}
         data['categories'] = categories
         data['article'] = get_object_or_404(Article, id=article_id)
         data['content'] = data['article'].content
         data['pre_article'] = pre_next_article(article_id)[0]  # 代表引用pre_next_article方法返回的第一个参数
         data['next_article'] = pre_next_article(article_id)[1]  # 代表引用pre_next_article方法返回的第二个参数
-        data['has_favorite'] = has_favorite  # 判断是否收藏
 
         return render(request, 'post/article_detail_page.html', data)

@@ -2,7 +2,7 @@
 from django.db import models
 
 from post.models import Article
-from tools.models import Like
+from tools.models import Like, Favorite
 from tools.views.article_recommend import rand_article
 
 
@@ -20,8 +20,17 @@ def like_or_not(request):
                 article_id = like_article.object_id
                 # article = Article.objects.get(id=article_id)
                 like_article_id_list.append(article_id)
-    content = {'like_article_id_list': like_article_id_list}
-    return content
+    data = {'like_article_id_list': like_article_id_list}
+    return data
+
+
+def favorite_or_not(request):
+    favorite_article_id_list = []
+    if request.user.is_authenticated():
+        for favorite_article in Favorite.objects.filter(user=request.user, favorite_type=int(1)):
+           favorite_article_id_list.append(favorite_article.favorite_id)
+    data = {'favorite_article_id_list': favorite_article_id_list}
+    return data
 
 
 def user_recommend(request):
