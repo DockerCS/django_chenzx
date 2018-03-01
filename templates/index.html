@@ -18,7 +18,7 @@
                     <li>
                         <p>
                             <span class="like">
-                                <i class="{% if request.user.is_authenticated %}{% if article.id in favorite_article_id_list%}fa fa-heart{% else %}fa fa-heart-o{% endif %}{% else %}fa fa-heart-o{% endif %}" aria-hidden="true"></i>
+                                <i class="{% if request.user.is_authenticated %}{% if article.id in like_article_id_list%}fa fa-heart{% else %}fa fa-heart-o{% endif %}{% else %}fa fa-heart-o{% endif %}" aria-hidden="true"></i>
                                 <a href="javascript:void(0);" class="likebtn" data-id="{{ article.id }}" data-type="article">{{ article.like_nums }}喜欢</a>
                             </span>
                         </p>
@@ -114,15 +114,7 @@
                     <a href="{{ article.get_absolute_url }}#comment-area"><i class="fa fa-comments-o"></i> {{ comment_count }}评论</a>
                 </span>
                 <span class="like">
-                    {% if request.user.is_authenticated %}
-                        {% if article.id in like_article_id_list%}
-                            <i class="fa fa-heart" aria-hidden="true"></i>
-                        {% else %}
-                            <i class="fa fa-heart-o" aria-hidden="true"></i>
-                        {% endif %}
-                    {% else %}
-                        <i class="fa fa-heart-o" aria-hidden="true"></i>
-                    {% endif %}
+                    <i class="{% if request.user.is_authenticated %}{% if article.id in like_article_id_list%}fa fa-heart{% else %}fa fa-heart-o{% endif %}{% else %}fa fa-heart-o{% endif %}" aria-hidden="true"></i>
                     <a href="javascript:void(0);" class="likebtn" data-id="{{ article.id }}" data-type="article">{{ like_num }}喜欢</a>
                 </span>
                 <span><a href="{% url 'category' article.category.id %}"><i class="fa fa-tags"></i> {{ article.category.name }}</a></span>
