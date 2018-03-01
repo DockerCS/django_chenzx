@@ -45,7 +45,15 @@
                     <li>
                         <p>
                             <span class="like">
-                                <i class="{% if request.user.id == article.user_id %}fa fa-star{% else %}fa fa-star-o{% endif %}" aria-hidden="true"></i>
+                                {% if request.user.is_authenticated %}
+                                    {% if article.id in favorite_article_id_list%}
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% else %}
+                                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                                {% endif %}
                                 <a href="javascript:void(0);" id="favorite{{ article.id }}" class="collectionbtn" data-id="{{ article.id }}" data-favorite-nums="{{ article.favorite_nums }}" data-type="1"> {{ article.favorite_nums }}收藏</a>
                             </span>
                         </p>

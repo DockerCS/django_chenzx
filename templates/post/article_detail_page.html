@@ -51,9 +51,13 @@
                             <a href="{{ article.get_absolute_url }}#comment-area"><i class="fa fa-comments-o"></i> {{ comment_count }}评论</a>
                         </li>
                         <li>
-                            <i class="{% if has_favorite %}fa fa-star{% else %}fa fa-star-o{% endif %}" style="color:#337ab7;" aria-hidden="true"></i>
+                            <i class="{% if request.user.is_authenticated %}{% if article.id in favorite_article_id_list%}fa fa-star{% else %}fa fa-star-o{% endif %}{% else %}fa fa-star-o{% endif %}" style="color:#337ab7;" aria-hidden="true"></i>
                             <a href="javascript:void(0);" class="collectionbtn" data-id="{{ article.id }}" data-type="1">
-                                {% if has_favorite %}已收藏{% else %}收藏{% endif %}
+                                {% if article.id in favorite_article_id_list%}
+                                    已收藏
+                                {% else %}
+                                    收藏
+                                {% endif %}
                             </a>
                         </li>
                         <li>
