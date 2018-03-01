@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     # MyApp
     'user',
     'post',
+    # 'subject',  # 专题
     'category',
     'tools',
     'me',
@@ -137,6 +138,7 @@ TEMPLATES = [
                 'social_django.context_processors.login_redirect',
                 # 自定义模版全局变量(默认变量)
                 'django_chenzx.global_variable.like_or_not',  # 点赞
+                'django_chenzx.global_variable.favorite_or_not',  # 收藏
                 'django_chenzx.global_variable.user_recommend',  # 用户推荐
             ],
         },
