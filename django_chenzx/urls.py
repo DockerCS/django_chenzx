@@ -30,6 +30,7 @@ urlpatterns = [
     # url(r'^captcha/', include('captcha.urls')),  # 图片验证码
     url(r'^user/', include('user.urls')),  # 用户urls
     url(r'^post/', include('post.urls')),  # 博客urls
+    url(r'^subject/', include('subject.urls')),  # 专题
     url(r'^category/', include('category.urls')),  # 博客分类rls
     url(r'^me/', include('me.urls')),  # 关于我
     url(r'^tools/', include('tools.urls')),  # 关于我
