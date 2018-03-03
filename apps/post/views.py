@@ -3,7 +3,7 @@ from django.views.generic import View
 
 from .models import Article
 from category.models import Category
-from tools.models import Favorite
+from subject.models import SubjectBanner
 from tools.views.paginate import getPages
 from tools.views.article_recommend import pre_next_article
 from tools.decorator.views_decorator import record_view
@@ -15,6 +15,8 @@ class IndexView(View):
     """
     def get(self, request):
         categories = Category.objects.all()
+        banners = SubjectBanner.objects.order_by('?')[:5]  # 取轮播图任意五条
+
         if request.user.is_superuser:
             article_list = Article.objects.all().order_by('-created_time')
         else:
@@ -32,6 +34,7 @@ class IndexView(View):
 
         data = {}
         data['categories'] = categories
+        data['banners'] = banners
         data["article_list"] = article_list
         data['pages'] = pages
         data['hot_like_article_list'] = hot_like_article_list
