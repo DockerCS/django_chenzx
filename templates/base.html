@@ -78,6 +78,7 @@
                                     </li>
                                 {% endif %}
                             {% endfor %}
+                            <li><a href="{% url 'subject:subject' %}">个性专题</a></li>
                             <li><a href="#">关于我</a>
                                 <ul>
                                     <li><a href="{% url 'me:personalprofile' %}">个人简介</a></li>
@@ -150,7 +151,7 @@
                                 </div>
                             {% endif %}
                         </div>
-                        <!--侧边栏中-->
+                        <!--侧边栏中一-->
                         <div class="tuwen">
                             <h3 class="tit">
                                 <i class="fa fa-arrows" aria-hidden="true"></i>随机推荐
@@ -169,6 +170,34 @@
                                 {% endfor %}
                             </ul>
                         </div>
+                        <!--侧边中二-->
+{#                        <div class="tuwen">#}
+{#                            <h3 class="tit">#}
+{#                                <i class="fa fa-keyboard" aria-hidden="true"></i>智能推荐#}
+{#                            </h3>#}
+{#                            <ul class="click-rank">#}
+{#                                <!--导入阅读器标签-->#}
+{#                                {% for article in click_article_list %}#}
+{#                                    <li>#}
+{#                                        <table class="click-index">#}
+{#                                            <tr>#}
+{#                                                <td class="c-content">#}
+{#                                                    <span>#}
+{#                                                        <span class="c-index {% if forloop.first %}c-index-hot1{% elif forloop.counter == 2 %}c-index-hot2{% elif forloop.counter == 3 %}c-index-hot3{% endif %}">#}
+{#                                                            {{ forloop.counter }}#}
+{#                                                        </span>#}
+{#                                                        <a href="{% url 'post:articledetail' article.id %}" title="{{ article.title }}" target="_blank">#}
+{#                                                            {{ article.title }}#}
+{#                                                        </a>#}
+{#                                                    </span>#}
+{#                                                </td>#}
+{#                                                <td class="c-content-right"><p class="view_num">{{ article.view_nums }}</p></td>#}
+{#                                            </tr>#}
+{#                                        </table>#}
+{#                                    </li>#}
+{#                                {% endfor %}#}
+{#                            </ul>#}
+{#                        </div>#}
                         <!--侧边下-->
                         <div id="side-float" class="ph1">
                             <h3 class="tit">
