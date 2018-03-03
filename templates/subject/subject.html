@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>
+    {% for subject in subjects %}
+        <a href="{% url 'subject:subjectdetail' subject.id %}">{{ subject.title }}</a>
+        {{ subject.author }}
+        {{ subject.profile }}
+    {% endfor %}
+</p>
+</body>
+</html>

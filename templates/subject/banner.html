@@ -185,48 +185,56 @@
         });
     </script>
     <div id="list" style="left: -855px;">
-        <li>
-            <a href="#" target="_blank">
-                <img src="{{ MEDIA_URL }}image/banner/5.jpg" alt="5"/>
-                <div class="pic_intro">这是第五张</div>
-            </a>
-        </li>
-        <li>
-            <a href="#" target="_blank">
-                <img src="{{ MEDIA_URL }}image/banner/1.jpg" alt="1"/>
-                <div class="pic_intro">这是第一张</div>
-            </a>
-        </li>
-        <li>
-            <a href="#" target="_blank">
-                <img src="{{ MEDIA_URL }}image/banner/2.jpg" alt="2"/>
-                <div class="pic_intro">这是第二张</div>
-            </a>
-        </li>
-        <li>
-            <a href="#" target="_blank">
-                <img src="{{ MEDIA_URL }}image/banner/3.jpg" alt="3"/>
-                <div class="pic_intro">这是第三张</div>
-            </a>
-        </li>
-        <li>
-            <a href="#" target="_blank">
-                <img src="{{ MEDIA_URL }}image/banner/4.jpg" alt="4"/>
-                <div class="pic_intro">这是第四张</div>
-            </a>
-        </li>
-        <li>
-            <a href="#" target="_blank">
-                <img src="{{ MEDIA_URL }}image/banner/5.jpg" alt="5"/>
-                <div class="pic_intro">这是第五张</div>
-            </a>
-        </li>
-        <li>
-            <a href="#" target="_blank">
-                <img src="{{ MEDIA_URL }}image/banner/1.jpg" alt="1"/>
-                <div class="pic_intro">这是第一张</div>
-            </a>
-        </li>
+        {% for banner in banners %}
+            <li>
+                <a href="{% url 'subject:subjectdetail' banner.subject.id %}" target="_blank">
+                    <img src="{{ MEDIA_URL }}{{ banner.image }}" alt="{{ banner.subject.title }}"/>
+                    <div class="pic_intro">{{ banner.subject.title }}</div>
+                </a>
+            </li>
+        {% endfor %}
+{#        <li>#}
+{#            <a href="#" target="_blank">#}
+{#                <img src="{{ MEDIA_URL }}image/banner/5.jpg" alt="5"/>#}
+{#                <div class="pic_intro">这是第五张</div>#}
+{#            </a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="#" target="_blank">#}
+{#                <img src="{{ MEDIA_URL }}image/banner/1.jpg" alt="1"/>#}
+{#                <div class="pic_intro">这是第一张</div>#}
+{#            </a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="#" target="_blank">#}
+{#                <img src="{{ MEDIA_URL }}image/banner/2.jpg" alt="2"/>#}
+{#                <div class="pic_intro">这是第二张</div>#}
+{#            </a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="#" target="_blank">#}
+{#                <img src="{{ MEDIA_URL }}image/banner/3.jpg" alt="3"/>#}
+{#                <div class="pic_intro">这是第三张</div>#}
+{#            </a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="#" target="_blank">#}
+{#                <img src="{{ MEDIA_URL }}image/banner/4.jpg" alt="4"/>#}
+{#                <div class="pic_intro">这是第四张</div>#}
+{#            </a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="#" target="_blank">#}
+{#                <img src="{{ MEDIA_URL }}image/banner/5.jpg" alt="5"/>#}
+{#                <div class="pic_intro">这是第五张</div>#}
+{#            </a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="#" target="_blank">#}
+{#                <img src="{{ MEDIA_URL }}image/banner/1.jpg" alt="1"/>#}
+{#                <div class="pic_intro">这是第一张</div>#}
+{#            </a>#}
+{#        </li>#}
     </div>
     <div id="buttons">
         <span index="1" class="on"></span>

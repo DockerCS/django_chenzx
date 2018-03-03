@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>
+    {{ count }}
+    {{ subject.profile }}
+<ul>
+    {% for chapter in chapters %}
+        {{ chapter.title }}
+        {% for item in chapter.chapter %}
+            <a href="{% url 'post:articledetail' item.id %}">{{ item.title }}</a>
+        {% endfor %}
+    {% endfor %}
+</ul>
+
+</p>
+
+</body>
+</html>
