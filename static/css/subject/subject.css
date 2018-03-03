@@ -137,6 +137,7 @@
 .subject-content img{
     float: left;
     width: 100px;
+    height: 80px;
 }
 .subject-description{ margin-left: 110px;text-indent: 1em;}
 .subject-description h4{ font-weight: bold; margin-top: 10px;}
