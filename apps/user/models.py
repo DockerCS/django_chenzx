@@ -9,7 +9,7 @@ class UserProfile(AbstractUser):
     birthday = models.DateField(null=True, blank=True, verbose_name='生日')
     address = models.CharField(max_length=100, default='火星的地球驻点')
     mobile = models.CharField(max_length=11, null=True, blank=True, verbose_name='电话')
-    avatar = models.ImageField(upload_to="image/avatar", default=u'image/avatar/you.png', max_length=200, verbose_name='头像')
+    avatar = models.ImageField(upload_to="image/avatar", default=u'image/avatar/you.png', max_length=200, verbose_name='头像', null=True, blank=True)
 
     class Meta:
         verbose_name = "用户信息"

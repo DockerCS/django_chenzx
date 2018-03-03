@@ -48,7 +48,7 @@ class GuesBook(models.Model):
 class MyPicture(models.Model):
     """我的相册"""
     title = models.CharField(max_length=100, verbose_name='标题')
-    mypicture_cover = models.ImageField(upload_to="image/mypicture/cover", max_length=100, verbose_name='相册封面')
+    mypicture_cover = models.ImageField(upload_to="image/mypicture/cover", max_length=100, verbose_name='相册封面', null=True, blank=True)
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='添加时间')
 
     class Meta:
@@ -71,7 +71,7 @@ class Photo(models.Model):
     """相册照片"""
     title = models.CharField(max_length=100, verbose_name='标题')
     mypicture = models.ForeignKey(MyPicture, verbose_name="所属相册")
-    photo = models.ImageField(upload_to="image/mypicture/photo", max_length=100, verbose_name='照片')
+    photo = models.ImageField(upload_to="image/mypicture/photo", max_length=100, verbose_name='照片', null=True, blank=True)
     # photo_thumbnail = models.CharField(max_length=100, null=True, blank=True, verbose_name='缩略图')
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='添加时间')
 
