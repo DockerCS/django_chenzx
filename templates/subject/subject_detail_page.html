@@ -11,15 +11,16 @@
 {% block customstatic %}
     <!-- 评论样式 -->
     <link rel="stylesheet" href="{% static 'css/comment/comment.css' %}">
+    <link href="{% static 'css/subject/subject.css' %}" rel="stylesheet">
     <!--使用bootstrap框架-->
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 {% endblock customstatic %}
 
 {% block article_list&article_content&blog_filter %}
     <!-- 专题详细信息展示 -->
-    <div class="article_detail">
-        <div class="article-header">
-            <div class="article_title">
+    <div class="subject-detail">
+        <div class="subject-header">
+            <div class="subject_title">
                 <h2>{{ subject.title }}</h2>
             </div>
             <div class="tag-list">
@@ -58,9 +59,34 @@
                 </ul>
             </div>
         </div>
-{#        <div class="article_content">#}
-{#            <p>{{ content | safe }}</p>#}
-{#        </div>#}
+        <div class="subject-content">
+            <div class="alert alert-info">
+                <img src="{{ MEDIA_URL }}{{ subject.image }}">
+                <div class="subject-description">
+                    <h4 style="font-weight: bold; margin-top: 10px;">专题简介</h4>
+                    <p>{{ subject.profile }}</p>
+                </div>
+            </div>
+            {% for chapter in chapters %}
+                <div class="subject-chapter">
+                    <h4>{{ forloop.counter }}、{{ chapter.title }}</h4>
+                    <ul class="subject-items">
+                        {% for item in chapter.items %}
+                            <li>
+                                <span>{{ forloop.counter }}) {{ item.type_name }}：</span>
+                                <a href="{% url 'post:articledetail' item.id %}" target="_blank">{{ item.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+            <div class="share-btns">
+                <div style="padding-left: 2em;">
+                    <p>{{ count }}</p>
+                    <p>(原创内容，转载请注明来自 <a href="/">陈志祥的博客</a>！本文链接：<a href="{% url 'subject:subjectdetail' subject.id %}">http://chenzx.name/subject/{{ subject.id }}</a>)</p>
+                </div>
+            </div>
+        </div>
         <section class="comment-area" id="comment-area">
             {% if user.is_authenticated %}
                 <div class="comment">
