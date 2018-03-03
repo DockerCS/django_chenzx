@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import View
 
 from .models import PersonalProfile, GuesBook, MyPicture, Photo
+from category.models import Category
 from tools.views.paginate import getPages
 from tools.decorator.views_decorator import record_view
 
@@ -14,6 +15,7 @@ class PersonalProfileView(View):
     @record_view(PersonalProfile)
     def get(self, request, id=1):
         data = {}
+        data['categories'] = Category.objects.all()
         data['myinfo'] = PersonalProfile.objects.all()
         # 返回 /me/aboutme.html页面
         return render(request, 'me/aboutme.html', data)
@@ -27,6 +29,7 @@ class MyPictureView(View):
         mypicture_list = MyPicture.objects.all()
 
         data = {}
+        data['categories'] = Category.objects.all()
         data['mypicture_list'] = mypicture_list
         # 返回 /me/mypicture.html页面
         return render(request, 'me/mypicture.html', data)
@@ -41,6 +44,7 @@ class PhotoView(View):
         pages, photo_list = getPages(request, photo_list, 20)
 
         data = {}
+        data['categories'] = Category.objects.all()
         data['picture'] = MyPicture.objects.get(id=mypicture_id)
         data['photo_list'] = photo_list
         data['pages'] = pages
@@ -67,5 +71,6 @@ class GuestBookView(View):
     """
     def get(self, request):
         data = {}
+        data['categories'] = Category.objects.all()
         data['guestbook'] = get_object_or_404(GuesBook, id=1)
         return render(request, 'me/guestbook.html', data)

@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import View
 
-from .models import Subject, SubjectBanner
+from .models import Subject
+from category.models import Category
 from tools.decorator.views_decorator import record_view
 
 
@@ -9,9 +10,11 @@ class SubjectListView(View):
     """专题列表"""
     def get(self, request):
         subjects = Subject.objects.all()
+        categories = Category.objects.all()
 
         data = {}
         data['subjects'] = subjects
+        data['categories'] = categories
         return render(request, 'subject/subject.html', data)
 
 
@@ -19,6 +22,7 @@ class SubjectDetailView(View):
     """专题详情"""
     @record_view(Subject)
     def get(self, request, id):
+        categories = Category.objects.all()
         subject = Subject.objects.get(id=id)
         chapters = []
 
@@ -56,6 +60,7 @@ class SubjectDetailView(View):
             chapters.append(chapter)
 
         data = {}
+        data['categories'] = categories
         data['subject'] = subject
         data['chapters'] = chapters
         data['count'] = u'该专题分%s章节，共%s篇博客、%s个教程' % (len(chapters), post_num, tutorial_num)
