@@ -80,6 +80,6 @@ class Article(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('post:articledetail', kwargs={'article_id': self.pk})
+        return reverse('post:articledetail', kwargs={'id': self.pk})
 
 

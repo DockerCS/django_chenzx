@@ -20,5 +20,5 @@ from .views import IndexView, ArticleDetailView
 app_name = 'post'
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
-    url(r'^(?P<article_id>[0-9]+)/$', ArticleDetailView.as_view(), name='articledetail'),  # id为文章模型Article的主键，?P<id>[0-9]+用来传递前端的参数id到后端。
+    url(r'^(?P<id>[0-9]+)/$', ArticleDetailView.as_view(), name='articledetail'),  # id为文章模型Article的主键，?P<id>[0-9]+用来传递前端的参数id到后端。
 ]

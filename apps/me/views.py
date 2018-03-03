@@ -4,15 +4,15 @@ from django.views.generic import View
 
 from .models import PersonalProfile, GuesBook, MyPicture, Photo
 from tools.views.paginate import getPages
-from tools.decorator.views_decorator import record_view_aboutme
+from tools.decorator.views_decorator import record_view
 
 
 class PersonalProfileView(View):
     """
     关于我
     """
-    @record_view_aboutme(PersonalProfile)
-    def get(self, request):
+    @record_view(PersonalProfile)
+    def get(self, request, id=1):
         data = {}
         data['myinfo'] = PersonalProfile.objects.all()
         # 返回 /me/aboutme.html页面

@@ -47,14 +47,14 @@ class ArticleDetailView(View):
     博客详情页
     """
     @record_view(Article)
-    def get(self, request, article_id):
+    def get(self, request, id):
         categories = Category.objects.all()
 
         data = {}
         data['categories'] = categories
-        data['article'] = get_object_or_404(Article, id=article_id)
+        data['article'] = get_object_or_404(Article, id=id)
         data['content'] = data['article'].content
-        data['pre_article'] = pre_next_article(article_id)[0]  # 代表引用pre_next_article方法返回的第一个参数
-        data['next_article'] = pre_next_article(article_id)[1]  # 代表引用pre_next_article方法返回的第二个参数
+        data['pre_article'] = pre_next_article(id)[0]  # 代表引用pre_next_article方法返回的第一个参数
+        data['next_article'] = pre_next_article(id)[1]  # 代表引用pre_next_article方法返回的第二个参数
 
         return render(request, 'post/article_detail_page.html', data)
