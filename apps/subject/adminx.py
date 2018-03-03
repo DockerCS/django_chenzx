@@ -40,4 +40,5 @@ class SubjectBannerAdmin(object):
 xadmin.site.register(SubjectType, SubjectTypeAdmin)
 xadmin.site.register(SubjectStaticType, SubjectStaticTypeAdmin)
 xadmin.site.register(Subject, SubjectAdmin)
+xadmin.site.register(SubjectChapter, SubjectChapterAdmin)
 xadmin.site.register(SubjectBanner, SubjectBannerAdmin)
