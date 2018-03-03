@@ -26,10 +26,19 @@ def like_or_not(request):
 
 def favorite_or_not(request):
     favorite_article_id_list = []
+    favorite_subject_id_list = []
     if request.user.is_authenticated():
         for favorite_article in Favorite.objects.filter(user=request.user, favorite_type=int(1)):
            favorite_article_id_list.append(favorite_article.favorite_id)
-    data = {'favorite_article_id_list': favorite_article_id_list}
+
+        for favorite_subject in Favorite.objects.filter(user=request.user, favorite_type=int(2)):
+           favorite_subject_id_list.append(favorite_subject.favorite_id)
+
+
+    data = {
+        'favorite_article_id_list': favorite_article_id_list,
+        'favorite_subject_id_list': favorite_subject_id_list
+    }
     return data
 
 
