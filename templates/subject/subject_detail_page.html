@@ -1,29 +1,142 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load comments %}
+{% load comments_xtd %}
 {% load view_num %}
 
 {% block title %}
-    <title>专题 - 夕象 | 陈志祥的个人博客</title>
+    <title>{{ subject.title }}</title>
 {% endblock title %}
 
 {% block customstatic %}
-    <!--me???-->
-    <link href="{% static 'css/me/main.css' %}" rel="stylesheet">
+    <!-- 评论样式 -->
+    <link rel="stylesheet" href="{% static 'css/comment/comment.css' %}">
+    <!--使用bootstrap框架-->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 {% endblock customstatic %}
 
-
-{% block aboutme&subject %}
-    <div class="container">
-        <div class="con_content">
-            <div class="about_box">
-                {{ count }}
-                {% for chapter in chapters %}
-                    {{ chapter.title }}
-                    {% for item in chapter.chapter %}
-                        <a href="{% url 'post:articledetail' item.id %}">{{ item.title }}</a>
-                    {% endfor %}
-                {% endfor %}
+{% block article_list&article_content&blog_filter %}
+    <!-- 专题详细信息展示 -->
+    <div class="article_detail">
+        <div class="article-header">
+            <div class="article_title">
+                <h2>{{ subject.title }}</h2>
+            </div>
+            <div class="tag-list">
+                <ul>
+                    <li>
+                        <i class="fa fa-user-md"></i> {{ subject.author }}
+                    </li>
+                    <li>
+                        <i class="fa fa-clock-o"></i> {{ subject.created_time | date:"Y-m-d" }}
+                    </li>
+                </ul>
+                <ul>
+                    <!-- 导入阅读器标签 -->
+                    {% get_view_nums for subject as view_num %}
+                    <!-- 评论计数，两处引用 -->
+                    {% get_comment_count for subject as comment_count %}
+                    <li>
+                        <i class="fa fa-list-alt"></i> {{ subject.type.title }}
+                    </li>
+                    <li  style="color:#337ab7;">
+                        <a href="{{ subject.get_absolute_url }}#comment-area"><i class="fa fa-comments-o"></i> {{ comment_count }}评论</a>
+                    </li>
+                    <li>
+                        <i class="{% if request.user.is_authenticated %}{% if subject.id in favorite_subject_id_list%}fa fa-star{% else %}fa fa-star-o{% endif %}{% else %}fa fa-star-o{% endif %}" style="color:#337ab7;" aria-hidden="true"></i>
+                        <a href="javascript:void(0);" class="collectionbtn" data-id="{{ subject.id }}" data-type="2">
+                            {% if subject.id in favorite_subject_id_list %}
+                                已收藏
+                            {% else %}
+                                收藏
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <i class="fa fa-eye"></i> {{ view_num }}浏览
+                    </li>
+                </ul>
             </div>
         </div>
+{#        <div class="article_content">#}
+{#            <p>{{ content | safe }}</p>#}
+{#        </div>#}
+        <section class="comment-area" id="comment-area">
+            {% if user.is_authenticated %}
+                <div class="comment">
+                    <div class="well">
+                        {% render_comment_form for subject %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="well">
+                    {% include 'comments/_login_panel.html' %}
+                </div>
+            {% endif %}
+            <div class="comment-list">
+                <div class="comment-name">
+                    <ul>
+                        <li>
+                            <strong class="title-name">最新评论</strong>
+                        </li>
+                    </ul>
+                </div>
+                {% if not comment_count %}
+                    <h4 style="text-align: center;margin-top: 40px">暂时没有评论，请多多指教！</h4>
+                {% endif %}
+                {% render_xtdcomment_tree for subject allow_flagging allow_feedback show_feedback %}
+                {% block extra-js %}
+                    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+                    <script>
+                        $(function () {
+                            $('[data-toggle="tooltip"]').tooltip({html: true})
+                        })
+                    </script>
+                {% endblock %}
+            </div>
+        </section>
     </div>
-{% endblock aboutme&subject %}
+    <script type="text/javascript">
+        // 收藏
+        function add_fav(current_elem, favorite_id, favorite_type){
+            $.ajax({
+                cache: false,
+                type: "POST",
+                dataType: 'json',
+                url: "{% url 'addfavorite' %}",
+                data: {'favorite_id':favorite_id, 'favorite_type':favorite_type},
+                async: true,
+                beforeSend: function(xhr, settings){
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success: function(data) {
+                    if(data.status == "fail"){
+                        if(data.msg == "用户未登录"){
+                            alert("请您登陆后再收藏吧！")
+                        }else{
+                            alert(data.msg)
+                        }
+                    }else if(data.status == "success"){
+                        if(data.msg == "已收藏"){
+                            current_elem.text(data.msg);
+                            current_elem.parent().find('i').attr("class", "fa fa-star");
+                        }else if(data.msg == "收藏"){
+                            current_elem.text(data.msg);
+                            current_elem.parent().find('i').attr("class", "fa fa-star-o");
+                        }
+                    }
+                }
+            });
+         }
+        $('.collectionbtn').click(function(){
+            var favorite_id = $(this).attr('data-id');
+            var favorite_type = $(this).attr('data-type');
+            add_fav($(this), favorite_id, favorite_type);
+        });
+    </script>
+{% endblock article_list&article_content&blog_filter %}
+
+
+
+
