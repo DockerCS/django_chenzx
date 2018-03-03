@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     # MyApp
     'user',
     'post',
-    # 'subject',  # 专题
+    'subject',  # 专题
     'category',
     'tools',
     'me',
