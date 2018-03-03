@@ -1,16 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<p>
-    {% for subject in subjects %}
-        <a href="{% url 'subject:subjectdetail' subject.id %}">{{ subject.title }}</a>
-        {{ subject.author }}
-        {{ subject.profile }}
-    {% endfor %}
-</p>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load view_num %}
+
+{% block title %}
+    <title>专题 - 夕象 | 陈志祥的个人博客</title>
+{% endblock title %}
+
+{% block customstatic %}
+    <!--me???-->
+    <link href="{% static 'css/me/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/subject/subject.css' %}" rel="stylesheet">
+    <!--使用bootstrap框架-->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+{% endblock customstatic %}
+
+
+{% block aboutme&subject %}
+    <div class="container">
+        <div class="con_content">
+            <div class="about_box">
+                <div class="subject-list">
+                    {% for subject in subjects %}
+                        <div class="subject">
+                            <a href="{% url 'subject:subjectdetail' subject.id %}">
+                                <img src="{{ MEDIA_URL }}{{ subject.image }}" class="subject-img" alt="{{ subject.title }}">
+                                <p class="subject-number">
+                                    <span>阅读(2)</span>
+                                    <span>评论(9)</span>
+                                </p>
+                                <div class="subject-text">
+                                    <h4 class="subject-title">{{ subject.title }}</h4>
+                                    <p class="subject-type">
+                                        <span>类别：{{ subject.type }}</span>
+                                        (<span class="subject-static {% if subject.static.title == '连载中' %}subject-static-red{% endif %}">{{ subject.static.title }}</span>)
+                                    </p>
+                                    <p class="subject-descript">{{ subject.profile }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock aboutme&subject %}
+

@@ -1,23 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<p>
-    {{ count }}
-    {{ subject.profile }}
-<ul>
-    {% for chapter in chapters %}
-        {{ chapter.title }}
-        {% for item in chapter.chapter %}
-            <a href="{% url 'post:articledetail' item.id %}">{{ item.title }}</a>
-        {% endfor %}
-    {% endfor %}
-</ul>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load view_num %}
 
-</p>
+{% block title %}
+    <title>专题 - 夕象 | 陈志祥的个人博客</title>
+{% endblock title %}
 
-</body>
-</html>
+{% block customstatic %}
+    <!--me???-->
+    <link href="{% static 'css/me/main.css' %}" rel="stylesheet">
+{% endblock customstatic %}
+
+
+{% block aboutme&subject %}
+    <div class="container">
+        <div class="con_content">
+            <div class="about_box">
+                {{ count }}
+                {% for chapter in chapters %}
+                    {{ chapter.title }}
+                    {% for item in chapter.chapter %}
+                        <a href="{% url 'post:articledetail' item.id %}">{{ item.title }}</a>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock aboutme&subject %}
