@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load comments %}
 {% load view_num %}
 
 {% block title %}
@@ -22,11 +23,15 @@
                 <div class="subject-list">
                     {% for subject in subjects %}
                         <div class="subject">
+                            <!--导入阅读器标签-->
+                            {% get_view_nums for subject as view_num %}
+                            <!-- 评论计数 -->
+                            {% get_comment_count for subject as comment_count %}
                             <a href="{% url 'subject:subjectdetail' subject.id %}">
                                 <img src="{{ MEDIA_URL }}{{ subject.image }}" class="subject-img" alt="{{ subject.title }}">
                                 <p class="subject-number">
-                                    <span>阅读(2)</span>
-                                    <span>评论(9)</span>
+                                    <span>阅读({{ view_num }})</span>
+                                    <span>评论({{ comment_count }})</span>
                                 </p>
                                 <div class="subject-text">
                                     <h4 class="subject-title">{{ subject.title }}</h4>
