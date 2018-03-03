@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
@@ -50,6 +51,9 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('subject:subjectdetail', kwargs={'id': self.pk})
 
 
 class SubjectChapter(models.Model):
