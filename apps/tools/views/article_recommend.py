@@ -21,13 +21,13 @@ def pre_next_article(id):
     """
     current_article = Article.objects.get(id=id)  # 当前打开的博客
     """得到当前文章的前面部分和后面部分全部文章，按照id大小排列，例如：
-    当前id = 26，获得的pre_article和next_article的id分别为[27,28,29,...]
+    当前id = 26，获得的next_article和pre_article的id分别为[27,28,29,...]
     和[25,24,23,...]，如果缺少27，列表便是[28,29,30,...]接下来，获取它们的
     第一条记录，便是上一篇和下一篇文章；其中，__gt和__lt分别是大于和小于的意思，
     可以修饰到判断条件的字段上；exclude(is_published=False)用来排除没有发表的博客。
     """
-    pre_article = Article.objects.exclude(is_published=False).filter(id__gt=current_article.id).order_by('id')
-    next_article = Article.objects.exclude(is_published=False).filter(id__lt=current_article.id).order_by('-id')
+    pre_article = Article.objects.exclude(is_published=False).filter(id__lt=current_article.id).order_by('-id')
+    next_article = Article.objects.exclude(is_published=False).filter(id__gt=current_article.id).order_by('id')
 
     # 获取第一条记录
     if pre_article.count() > 0:
