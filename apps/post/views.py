@@ -27,10 +27,10 @@ class IndexView(View):
 
         hot_like_sql = "SELECT `post_article`.`id`, `post_article`.`title`, SUM(`tools_likenum`.`like_num`) AS `like_nums` FROM `post_article` LEFT OUTER JOIN `tools_likenum` ON (`post_article`.`id` = `tools_likenum`.`object_id` AND (`tools_likenum`.`content_type_id` = 12)) WHERE `post_article`.`is_published` = True GROUP BY `post_article`.`id` ORDER BY `like_nums` DESC LIMIT 5"
         hot_favorite_sql = "SELECT `post_article`.`id`, `post_article`.`title`, COUNT( `tools_favorite`.`favorite_id` ) AS `favorite_nums` FROM post_article LEFT OUTER JOIN `tools_favorite` ON (`post_article`.`id` = `tools_favorite`.`favorite_id` AND (`tools_favorite`.`favorite_type` = 1)) WHERE `post_article`.`is_published` = TRUE GROUP BY post_article.id ORDER BY favorite_nums DESC LIMIT 5"
-        hot_comment_sql = "select `post_article`.`id`, `post_article`.`title` from post_article left join (select * from django_comments where content_type_id =12) as c on post_article.id = c.object_pk group by post_article.id order by count(c.object_pk) desc"
+        hot_comment_sql = "select `post_article`.`id`, `post_article`.`title` from post_article left join (select * from django_comments where content_type_id =12) as c on post_article.id = c.object_pk WHERE `post_article`.`is_published` = TRUE group by post_article.id order by count(c.object_pk) desc  LIMIT 5"
         hot_like_article_list = Article.objects.raw(hot_like_sql)  # 点赞排行
         hot_favorite_article_list = Article.objects.raw(hot_favorite_sql)
-        hot_comment_article_list = Article.objects.raw(hot_comment_sql)[:5]  # 热评排行
+        hot_comment_article_list = Article.objects.raw(hot_comment_sql)  # 热评排行
 
         data = {}
         data['categories'] = categories
