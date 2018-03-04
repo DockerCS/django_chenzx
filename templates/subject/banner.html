@@ -185,30 +185,13 @@
         });
     </script>
     <div id="list" style="left: -855px;">
-
         {% for banner in banners %}
-            {% if forloop.first %}
-                <li>
-                    <a href="{% url 'subject:subjectdetail' banner.subject.id %}" target="_blank">
-                        <img src="{{ MEDIA_URL }}{{ banner.image }}" alt="{{ banner.subject.title }}"/>
-                        <div class="pic_intro">{{ banner.subject.title }}</div>
-                    </a>
-                </li>
-            {% endif %}
             <li>
                 <a href="{% url 'subject:subjectdetail' banner.subject.id %}" target="_blank">
                     <img src="{{ MEDIA_URL }}{{ banner.image }}" alt="{{ banner.subject.title }}"/>
                     <div class="pic_intro">{{ banner.subject.title }}</div>
                 </a>
             </li>
-            {% if forloop.last %}
-                <li>
-                    <a href="{% url 'subject:subjectdetail' banner.subject.id %}" target="_blank">
-                        <img src="{{ MEDIA_URL }}{{ banner.image }}" alt="{{ banner.subject.title }}"/>
-                        <div class="pic_intro">{{ banner.subject.title }}</div>
-                    </a>
-                </li>
-            {% endif %}
         {% endfor %}
     </div>
     <div id="buttons">
