@@ -72,7 +72,7 @@
                     <li>
                         <p>
                             <span class="like">
-                                <a href="{{ article.get_absolute_url }}#comment-area"><i class="fa fa-comments-o"></i> {{ comment_count }}评论</a>
+                                <a href="{{ article.get_absolute_url }}#comment-area"><i class="fa fa-comments-o"></i> {{ article.comment_count }}评论</a>
                             </span>
                         </p>
                         <span class="label {% if forloop.first %}label-1{% elif forloop.counter == 2 %}label-2{% elif forloop.counter == 3 %}label-3{% endif %}">{{ forloop.counter }}</span>
