@@ -1,1 +1,1 @@
-博客地址：<a href="chenzx.name">陈志祥的博客</a>
+博客地址：<a href="http://chenzx.name">陈志祥的博客</a>
