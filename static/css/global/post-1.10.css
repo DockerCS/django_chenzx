@@ -151,3 +151,9 @@
     clear: both;
     overflow: hidden;
 }
+
+/*筛选选中*/
+.current-post-filter {
+    color: #919299 !important;
+    cursor: text;
+}

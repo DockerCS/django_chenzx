@@ -9,9 +9,9 @@
         <div class="filter-item">
             <span><i class="fa fa-bookmark"></i> 主题动态</span>
             <span class="feed-switcher js-feed-switcher">
-                <a href="javascript:void(0);" onclick="post_filter('recommend')">推荐</a> |
-                <a href="javascript:void(0);" onclick="post_filter('hot_like')">热门排序</a> |
-                <a href="javascript:void(0);" onclick="post_filter('hot_comment')">热评排序</a>
+                <a href="javascript:void(0);" onclick="post_filter($(this), 'recommend')" {% if post_filter_type == 'recommend' %}class="current-post-filter"{% endif %} name="recommend">推荐</a> |
+                <a href="javascript:void(0);" onclick="post_filter($(this), 'hot_like')" {% if post_filter_type == 'hot_like' %}class="current-post-filter"{% endif %} name="hot_like">热门排序</a> |
+                <a href="javascript:void(0);" onclick="post_filter($(this), 'hot_comment')" {% if post_filter_type == 'hot_comment' %}class="current-post-filter"{% endif %} name="hot_comment">热评排序</a>
             </span>
         </div>
         <div class="clearfix"></div>
@@ -128,16 +128,15 @@
             });
         });
         //博客分类后筛选
-        function post_filter(post_filter_type){
+        function post_filter(current_elem, post_filter_type){
             //排序可调用的通用函数
             $('#post_filter_type').attr('value', post_filter_type);   //排序类型
             $('#article_filter').submit();   //提交表单
         }
-
         //设置凸显当前页码
         $(".page li a").each(function(){
             //首页中
-            if($(this).text()=="{{ article_list.number }}"){
+            if($(this).text() == "{{ article_list.number }}"){
                 $(this).parent().addClass("active");
             }
             //博客分类页面中
