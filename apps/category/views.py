@@ -42,10 +42,12 @@ class ArticleFilterView(View):
         if post_filter_type == 'recommend':
             # article_category_list = Article.objects.filter(category_id=category_id, is_published=True, is_recommend=True).order_by('-created_time')
             sql = "SELECT post_article.* FROM `post_article` WHERE (`post_article`.`category_id` = %s AND `post_article`.`is_published` = True AND `post_article`.`is_recommend` = True) ORDER BY `post_article`.`created_time` DESC" % category_id
-        elif post_filter_type =='hot_like':
+        elif post_filter_type == 'hot_like':
             sql = "SELECT post_article.*, SUM( `tools_likenum`.`like_num` ) AS `like_nums` FROM post_article LEFT OUTER JOIN `tools_likenum` ON ( `post_article`.`id` = `tools_likenum`.`object_id` AND ( `tools_likenum`.`content_type_id` = 12 ) ) WHERE `post_article`.`is_published` = TRUE AND `post_article`.`category_id` = %s GROUP BY post_article.id ORDER BY like_nums DESC" % category_id
-        else:
+        elif post_filter_type == 'hot_comment':
             sql = "SELECT post_article.* FROM post_article LEFT JOIN ( SELECT * FROM django_comments WHERE content_type_id = 12 ) AS c ON post_article.id = c.object_pk WHERE `post_article`.`is_published` = TRUE AND `post_article`.`category_id` = %s GROUP BY post_article.id ORDER BY count( c.object_pk ) DESC" % category_id
+        else:
+            sql = "SELECT post_article.* FROM `post_article` LEFT OUTER JOIN `tools_viewnum` ON (`post_article`.`id` = `tools_viewnum`.`object_id` AND (`tools_viewnum`.`content_type_id` = 12)) WHERE `post_article`.`is_published` = True  AND `post_article`.`category_id` = %s GROUP BY `post_article`.`id` ORDER BY SUM(`tools_viewnum`.`view_num`) DESC" % category_id
 
         article_category_list = Article.objects.raw(sql)
         add_len_to_raw_query(article_category_list)  # 加上len()方法，给分页器使用
