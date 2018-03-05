@@ -18,7 +18,6 @@
         <div class="clearfix"></div>
         <ul  class="category-list">
             <form id="article_filter" method="GET" action="{% url 'article_filter' %}">
-                {% csrf_token %}
                 {% for category in categories %}
                     {% if category.parent_id %}
                         <li {% if category.id == current_category_id %}class="current"{% endif %}>
