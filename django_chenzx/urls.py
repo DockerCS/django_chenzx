@@ -14,11 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.views.static import serve
+# from django.views.static import serve
 import xadmin
 
 from post.views import IndexView
-from django_chenzx.settings import MEDIA_ROOT, STATIC_ROOT
+# from django_chenzx.settings import MEDIA_ROOT, STATIC_ROOT
 
 
 urlpatterns = [
@@ -45,8 +45,8 @@ urlpatterns = [
     url(r'^notifications/', include('notifications.urls')),
 
     # 配置上传文件的访问函数，debug=False的时候
-    url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
-    url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
+    # url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
+    # url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
 ]
 
 # 全局404页面，名称是固定的

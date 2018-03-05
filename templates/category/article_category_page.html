@@ -10,8 +10,9 @@
             <span><i class="fa fa-bookmark"></i> 主题动态</span>
             <span class="feed-switcher js-feed-switcher">
                 <a href="javascript:void(0);" onclick="post_filter($(this), 'recommend')" {% if post_filter_type == 'recommend' %}class="current-post-filter"{% endif %} name="recommend">推荐</a> |
-                <a href="javascript:void(0);" onclick="post_filter($(this), 'hot_like')" {% if post_filter_type == 'hot_like' %}class="current-post-filter"{% endif %} name="hot_like">热门排序</a> |
-                <a href="javascript:void(0);" onclick="post_filter($(this), 'hot_comment')" {% if post_filter_type == 'hot_comment' %}class="current-post-filter"{% endif %} name="hot_comment">热评排序</a>
+                <a href="javascript:void(0);" onclick="post_filter($(this), 'hot_like')" {% if post_filter_type == 'hot_like' %}class="current-post-filter"{% endif %} name="hot_like">点赞排序</a> |
+                <a href="javascript:void(0);" onclick="post_filter($(this), 'hot_comment')" {% if post_filter_type == 'hot_comment' %}class="current-post-filter"{% endif %} name="hot_comment">热评排序</a> |
+                <a href="javascript:void(0);" onclick="post_filter($(this), 'hot_view')" {% if post_filter_type == 'hot_view' %}class="current-post-filter"{% endif %} name="hot_view">浏览排序</a>
             </span>
         </div>
         <div class="clearfix"></div>
