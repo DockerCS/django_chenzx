@@ -7,27 +7,28 @@
     <!--博客分类列表-->
     <div class="filter">
         <div class="filter-item">
-            <form id="article_filter" method="GET" action="{% url 'article_filter' %}">
-                {% csrf_token %}
-                <span><i class="fa fa-bookmark"></i> 主题动态</span>
-                <span class="feed-switcher js-feed-switcher">
-
-                    <a href="javascript:void(0);" data-feed-type="timeline_feed">推荐</a> |
-                    <a href="javascript:void(0);" data-feed-type="smart_feed">热门排序</a> |
-                    <a href="javascript:void(0);" data-feed-type="timeline_feed">时间排序</a>
-                </span>
-                <input type="hidden" name="current_category" value="{{ current_category }}"/>
-            </form>
+            <span><i class="fa fa-bookmark"></i> 主题动态</span>
+            <span class="feed-switcher js-feed-switcher">
+                <a href="javascript:void(0);" onclick="post_filter('recommend')">推荐</a> |
+                <a href="javascript:void(0);" onclick="post_filter('hot_favorite')">热门排序</a> |
+                <a href="javascript:void(0);" onclick="post_filter('hot_comment')">热评排序</a>
+            </span>
         </div>
         <div class="clearfix"></div>
         <ul  class="category-list">
-            {% for category in categories %}
-                {% if category.parent_id %}
-                    <li class="category-list-item">
-                        <a href="{% url 'category' category.id %}">{{ category.name }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
+            <form id="article_filter" method="GET" action="{% url 'article_filter' %}">
+                {% csrf_token %}
+                {% for category in categories %}
+                    {% if category.parent_id %}
+                        <li {% if category.id == current_category_id %}class="current"{% endif %}>
+                            <a href="{% url 'category' category.id %}">{{ category.name }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                <input type="hidden" id="current_category" name="current_category_id" value="{{ current_category_id }}"/>
+                <!--排序类型-->
+                <input type="hidden" name='post_filter_type' id='post_filter_type' value='{{ post_filter_type }}' />
+            </form>
         </ul>
     </div>
     <!-- 筛选后文章列表 -->
@@ -127,6 +128,11 @@
             });
         });
         //博客分类后筛选
+        function post_filter(post_filter_type){
+            //排序可调用的通用函数
+            $('#post_filter_type').attr('value', post_filter_type);   //排序类型
+            $('#article_filter').submit();   //提交表单
+        }
 
         //设置凸显当前页码
         $(".page li a").each(function(){
