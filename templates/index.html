@@ -11,7 +11,7 @@
     <div class="hot-recommend">
         <div class="hot-article f_l">
             <h2 class="title">
-                <i class="fa fa-list-ul" aria-hidden="true"></i> 热门排行
+                <i class="fa fa-list-ul" aria-hidden="true"></i> 点赞排行
             </h2>
             <ul class="hot-article-list">
                 {% for article in hot_like_article_list %}
@@ -29,6 +29,24 @@
             </ul>
         </div>
         <div class="hot-article f_r">
+            <h2 class="title">
+                <i class="fa fa-list-ul" aria-hidden="true"></i> 热评排行
+            </h2>
+            <ul class="hot-article-list">
+                {% for article in hot_comment_article_list %}
+                    <li>
+                        <p>
+                            <span class="like">
+                                <a href="{{ article.get_absolute_url }}#comment-area"><i class="fa fa-comments-o"></i> {{ article.comment_count }}评论</a>
+                            </span>
+                        </p>
+                        <span class="label {% if forloop.first %}label-1{% elif forloop.counter == 2 %}label-2{% elif forloop.counter == 3 %}label-3{% endif %}">{{ forloop.counter }}</span>
+                        <a href="{% url 'post:articledetail' article.id %}" title="{{ article.title }}" target="_blank">{{ article.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="hot-article f_l">
             <h2 class="title">
                 <i class="fa fa-list-ul" aria-hidden="true"></i> 热门收藏
             </h2>
@@ -56,24 +74,6 @@
                     <li>
                         <p>
                             <span class="like">{{ article.created_time | date:"Y-m-d" }}</span>
-                        </p>
-                        <span class="label {% if forloop.first %}label-1{% elif forloop.counter == 2 %}label-2{% elif forloop.counter == 3 %}label-3{% endif %}">{{ forloop.counter }}</span>
-                        <a href="{% url 'post:articledetail' article.id %}" title="{{ article.title }}" target="_blank">{{ article.title }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="hot-article f_l">
-            <h2 class="title">
-                <i class="fa fa-list-ul" aria-hidden="true"></i> 热评排行
-            </h2>
-            <ul class="hot-article-list">
-                {% for article in hot_comment_article_list %}
-                    <li>
-                        <p>
-                            <span class="like">
-                                <a href="{{ article.get_absolute_url }}#comment-area"><i class="fa fa-comments-o"></i> {{ article.comment_count }}评论</a>
-                            </span>
                         </p>
                         <span class="label {% if forloop.first %}label-1{% elif forloop.counter == 2 %}label-2{% elif forloop.counter == 3 %}label-3{% endif %}">{{ forloop.counter }}</span>
                         <a href="{% url 'post:articledetail' article.id %}" title="{{ article.title }}" target="_blank">{{ article.title }}</a>
