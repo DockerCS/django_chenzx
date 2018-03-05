@@ -72,8 +72,6 @@
                     <li>
                         <p>
                             <span class="like">
-                                <!-- 评论计数 -->
-                                {% get_comment_count for article as comment_count %}
                                 <a href="{{ article.get_absolute_url }}#comment-area"><i class="fa fa-comments-o"></i> {{ comment_count }}评论</a>
                             </span>
                         </p>
