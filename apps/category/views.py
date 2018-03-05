@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from django.views.generic import View
 
 from .models import Category
@@ -38,8 +39,10 @@ class ArticleFilterView(View):
         category_id = request.GET.get('current_category_id')
         post_filter_type = request.GET.get('post_filter_type')
 
-        # filter(is_published=True)排除未发表文章，filter需要放到query后面？为什么？
+        if (post_filter_type == None or category_id ==None):
+            return HttpResponseRedirect('/category/2/')
         if post_filter_type == 'recommend':
+            # filter(is_published=True)排除未发表文章，filter需要放到query后面？为什么？
             # article_category_list = Article.objects.filter(category_id=category_id, is_published=True, is_recommend=True).order_by('-created_time')
             sql = "SELECT post_article.* FROM `post_article` WHERE (`post_article`.`category_id` = %s AND `post_article`.`is_published` = True AND `post_article`.`is_recommend` = True) ORDER BY `post_article`.`created_time` DESC" % category_id
         elif post_filter_type == 'hot_like':
