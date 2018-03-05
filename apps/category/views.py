@@ -53,7 +53,7 @@ class ArticleFilterView(View):
 
         data = {}
         data['categories'] = categories
-        data['current_category_id'] = int(category_id)  # {% for category in categories %}中category.id为int，而category_id为str
+        data['current_category_id'] = int(category_id)  # for category in categories中category.id为int，而category_id为str
         data['post_filter_type'] = post_filter_type
         data['pages'] = pages
         data['article_category_list'] = article_category_list
