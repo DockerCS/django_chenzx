@@ -158,13 +158,13 @@
             }
 
             //每3s调用changeSlide函数进行图片轮播
-            var slideon = setInterval(changeSlide, 3000);
+            var slideon = setInterval(changeSlide, 4000);
 
             slideshow.onmouseover = function () {
                 clearInterval(slideon); //当鼠标移入时清除轮播事件
             };
             slideshow.onmouseout = function () {
-                slideon = setInterval(changeSlide, 3000); //当鼠标移出时重新开始轮播事件
+                slideon = setInterval(changeSlide, 4000); //当鼠标移出时重新开始轮播事件
             };
 
             for (var i = 0; i < pages.length; i++) { //定义鼠标移入和移出页码事件
