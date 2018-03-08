@@ -16,13 +16,13 @@ class IndexView(View):
     def get(self, request):
         categories = Category.objects.all()
 
-        banners = []
-        banner = SubjectBanner.objects.order_by('?')[:5]  # 取轮播图任意五条
-        for banner_item in banner:
-            banners.append(banner_item)
-            if len(banners) == 5:
-                banners.insert(0, banner[4])
-                banners.append(banner[0])
+        banners = SubjectBanner.objects.order_by('?')[:5]  # 取轮播图任意五条
+        # banners = []
+        # for banner_item in banner:
+        #     banners.append(banner_item)
+        #     if len(banners) == 5:
+        #         banners.insert(0, banner[4])
+        #         banners.append(banner[0])
 
         if request.user.is_superuser:
             article_list = Article.objects.all().order_by('-created_time')

@@ -1,4 +1,23 @@
 <div id="banner">
+    <div id="list">
+        {% for banner in banners %}
+            <li>
+                <a href="{% url 'subject:subjectdetail' banner.subject.id %}" target="_blank">
+                    <img src="{{ MEDIA_URL }}{{ banner.image }}"  class="{% if forloop.first %}active{% endif %}" alt="{{ banner.subject.title }}"/>
+                    <p class="{% if forloop.first %}active{% endif %}">{{ banner.subject.title }}</p>
+                </a>
+            </li>
+        {% endfor %}
+    </div>
+    <div id="buttons">
+        <span class="on" index="0"></span>
+        <span index="1"></span>
+        <span index="2"></span>
+        <span index="3"></span>
+        <span index="4"></span>
+    </div>
+    <a href="javascript:;" id="prev" class="arrow">&lt;</a>
+    <a href="javascript:;" id="next" class="arrow">&gt;</a>
     <style type="text/css">
         *{
             margin: 0;
@@ -19,20 +38,28 @@
             position: relative;
         }
         #list {
-            width: 5985px;
+            width: 855px;
             height: 300px;
-            position: absolute; z-index: 1;
+            position: absolute;
+            z-index: 0;
         }
         #list li {
             float: left;
             width: 855px;
             height: 300px;
-            position: relative;
+            position: absolute;
         }
         #list img {
             float: left;
+            width: 855px;
+            height: 300px;
+            opacity: 0; /*初始不透明度为0，图片都看不见*/
+            transition: opacity 1s linear; /*--重点--定义一个关于透明度的transition*/
         }
-        #list .pic_intro{
+        #list img.active {
+            opacity: 1; /*有active类的图片不透明度为1，即显示图片*/
+        }
+        #list p {
             position: absolute;
             bottom: 0;
             left: 0;
@@ -44,6 +71,11 @@
             text-indent: 10px;
             background: -webkit-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
             background: linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+            opacity: 0;
+            transition: all 0.5s;
+        }
+        #list p.active {
+            opacity: 1;
         }
         #buttons {
             position: absolute;
@@ -95,113 +127,66 @@
             right: 10px;
         }
     </style>
-{#    <script type="text/javascript" src="{% static 'js/jquery-1.3.2.js' %}"></script>#}
     <script type="text/javascript">
-        $(function () {
-            var banner = $('#banner');
-            var list = $('#list');
-            var buttons = $('#buttons span');
-            var prev = $('#prev');
-            var next = $('#next');
-            var index = 1;
-            var len = 5;
-            var interval = 3000;
-            var timer;
+        //---------主角：轮播图函数-------------
+        function slideshow() {
+            var slideshow = document.getElementById("list"),
+                imgs = slideshow.getElementsByTagName("img"), //得到图片们
+                descrips = slideshow.getElementsByTagName("p"), //得到描述们
+                pages = document.getElementById("buttons").getElementsByTagName("span"), //得到页码们
+                left_btn = document.getElementById("prev"),
+                right_btn = document.getElementById("next"),
+                current = 0; //current为当前活跃的图片编号
 
-            function animate (offset) {
-                var left = parseInt(list.css('left')) + offset;
-                if (offset>0) {
-                    offset = '+=' + offset;
-                }
-                else {
-                    offset = '-=' + Math.abs(offset);
-                }
-                list.animate({'left': offset}, 300, function () {
-                    if(left > -200){
-                        list.css('left', -855 * len);
-                    }
-                    if(left < (-855 * len)) {
-                        list.css('left', -855);
-                    }
-                });
+            function slideOff() {
+                imgs[current].className = ""; //图片淡出
+                pages[current].className = "";
+                descrips[current].className = "";
             }
 
-            function showButton() {
-                buttons.eq(index-1).addClass('on').siblings().removeClass('on');
+            function slideOn() {
+                imgs[current].className = "active"; //图片淡入
+                pages[current].className = "on";
+                descrips[current].className = "active";
             }
 
-            function play() {
-                timer = setTimeout(function () {
-                    next.trigger('click');
-                    play();
-                }, interval);
-            }
-            function stop() {
-                clearTimeout(timer);
+            function changeSlide() { //切换图片的函数
+                slideOff();
+                current++; //自增1
+                if (current >= 5) current = 0;
+                slideOn();
             }
 
-            next.bind('click', function () {
-                if (list.is(':animated')) {
-                    return;
-                }
-                if (index == 5) {
-                    index = 1;
-                }
-                else {
-                    index += 1;
-                }
-                animate(-855);
-                showButton();
-            });
+            //每3s调用changeSlide函数进行图片轮播
+            var slideon = setInterval(changeSlide, 3000);
 
-            prev.bind('click', function () {
-                if (list.is(':animated')) {
-                    return;
-                }
-                if (index == 1) {
-                    index = 5;
-                }
-                else {
-                    index -= 1;
-                }
-                animate(855);
-                showButton();
-            });
+            slideshow.onmouseover = function () {
+                clearInterval(slideon); //当鼠标移入时清除轮播事件
+            };
+            slideshow.onmouseout = function () {
+                slideon = setInterval(changeSlide, 3000); //当鼠标移出时重新开始轮播事件
+            };
 
-            buttons.each(function () {
-                 $(this).bind('click', function () {
-                     if (list.is(':animated') || $(this).attr('class')=='on') {
-                         return;
-                     }
-                     var myIndex = parseInt($(this).attr('index'));
-                     var offset = -855 * (myIndex - index);
-                     animate(offset);
-                     index = myIndex;
-                     showButton();
-                 })
-            });
-            banner.hover(stop, play);
-            play();
-        });
+            for (var i = 0; i < pages.length; i++) { //定义鼠标移入和移出页码事件
+                pages[i].onmouseover = function () {
+                    slideOff(); //图片淡出
+                    current = this.getAttribute("index"); //得到鼠标停留的页码对应的current
+                    slideOn(); //图片淡出
+                }
+            }
+            left_btn.onclick = function () {
+                slideOff(); //图片淡出
+                current--;
+                if (current < 0) current = 4;
+                slideOn(); //图片淡出
+            };
+            right_btn.onclick = function () {
+                slideOff(); //图片淡出
+                current++;
+                if (current > 4) current = 0;
+                slideOn(); //图片淡出
+            }
+        }
+        slideshow();
     </script>
-    <div id="list" style="left: -855px;">
-        {% for banner in banners %}
-            <li>
-                <a href="{% url 'subject:subjectdetail' banner.subject.id %}" target="_blank">
-                    <img src="{{ MEDIA_URL }}{{ banner.image }}" alt="{{ banner.subject.title }}"/>
-                    <div class="pic_intro">{{ banner.subject.title }}</div>
-                </a>
-            </li>
-        {% endfor %}
-    </div>
-    <div id="buttons">
-        <span index="1" class="on"></span>
-        <span index="2"></span>
-        <span index="3"></span>
-        <span index="4"></span>
-        <span index="5"></span>
-    </div>
-    <a href="javascript:;" id="prev" class="arrow">&lt;</a>
-    <a href="javascript:;" id="next" class="arrow">&gt;</a>
 </div>
-
