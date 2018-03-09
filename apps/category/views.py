@@ -17,7 +17,7 @@ class CategoryView(View):
         # filter(is_published=True)排除未发表文章，filter需要放到query后面？为什么？
         # article_category_list = Article.objects.query_by_category(category_id).filter(is_published=True).order_by('-created_time')
         if request.user.username == "chenzhixiang1992":
-            article_category_list = Article.objects.filter(category_id=category_id).order_by('-created_time')
+            article_category_list = Article.objects.filter(category_id=category_id).order_by('-created_time')  # 如果是超级用户准许看到未发表的文章
         else:
             article_category_list = Article.objects.filter(category_id=category_id, is_published=True).order_by('-created_time')
         pages, article_category_list = getPages(request, article_category_list, 10)
@@ -32,7 +32,7 @@ class CategoryView(View):
 
 class ArticleFilterView(View):
     """
-    博客分类之后筛选
+    博客分类之后筛选，用sql得到推荐、点赞、热评和浏览次数的数据，都以时间先后排序
     """
     def get(self, request):
         categories = Category.objects.all()
@@ -40,8 +40,9 @@ class ArticleFilterView(View):
         post_filter_type = request.GET.get('post_filter_type')
 
         if (post_filter_type == None or category_id ==None):
+            """如果没有传回筛选的类型或者分类id，那么重定向到第二个分类"""
             return HttpResponseRedirect('/category/2/')
-        if post_filter_type == 'recommend':
+        elif post_filter_type == 'recommend':
             # filter(is_published=True)排除未发表文章，filter需要放到query后面？为什么？
             # article_category_list = Article.objects.filter(category_id=category_id, is_published=True, is_recommend=True).order_by('-created_time')
             sql = "SELECT post_article.* FROM `post_article` WHERE (`post_article`.`category_id` = %s AND `post_article`.`is_published` = True AND `post_article`.`is_recommend` = True) ORDER BY `post_article`.`created_time` DESC" % category_id
