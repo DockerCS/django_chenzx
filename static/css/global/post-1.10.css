@@ -124,7 +124,11 @@
     margin-top: 10px;
     color: #999;
 }
-.category-list li { float: left; margin: 0 10px 10px 0; list-style: none;}
+.category-list li {
+    float: left;
+    margin: 0 10px 10px 0;
+    list-style: none;
+}
 .category-list li a{
     display: block;
     padding: 0 10px;
@@ -134,11 +138,15 @@
     background: #fff;
     color: #337ab7;
 }
-.category-list .li a:hover{
+.category-list li a:hover{
     background: #259;
     color: #fff;
 }
-.category-list li.current a{ background: #259!important; border-color: #259; color: #fff;}
+.category-list li.current a{
+    background: #259!important;
+    border-color: #259;
+    color: #fff;
+}
 
 /* 搜索 */
 .search-empty {
